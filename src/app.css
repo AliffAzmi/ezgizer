@@ -4,12 +4,12 @@
 
 @layer base {
 	body {
-		font-family: 'Nunito', sans-serif;
+		font-family: 'Montserrat', sans-serif;
 	}
 	h1,
 	h2,
 	h3,
 	h4 {
-		font-family: 'Nunito', sans-serif @apply font-semibold;
+		font-family: 'Montserrat', sans-serif @apply font-semibold;
 	}
 }

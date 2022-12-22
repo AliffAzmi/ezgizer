@@ -239,13 +239,13 @@
 						<td class="px-6 py-4 text-sm font-medium text-right whitespace-nowrap">
 							<button on:click={() => handleToggleModal('Update', i + 1)}>
 								<Icon
-									class=" w-6 h-6 text-gray-500 hover:text-gray-700"
+									class=" w-6 h-6 text-blue-500 hover:text-blue-700"
 									icon="material-symbols:edit-outline-sharp"
 								/>
 							</button>
 							<button on:click={() => handleRemoveItem(i + 1)}>
 								<Icon
-									class=" w-6 h-6 text-gray-500 hover:text-red-700"
+									class=" w-6 h-6 text-red-500 hover:text-red-700"
 									icon="ic:round-delete-outline"
 								/></button
 							>
@@ -354,12 +354,15 @@
 						>
 							Price
 						</label>
-						<input
-							class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-							name="price"
-							type="text"
-							value={selecteditem?.price ? selecteditem.price : ''}
-						/>
+						<div class=" flex items-center gap-2 bg-gray-200">
+							<span class=" text-sm pl-2 ">RM</span>
+							<input
+								class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-2 leading-tight focus:outline-none focus:bg-white "
+								name="price"
+								type="text"
+								value={selecteditem?.price ? selecteditem.price : ''}
+							/>
+						</div>
 					</div>
 					<div class="w-full md:w-1/3 px-3 mb-6 md:mb-0">
 						<label
@@ -405,8 +408,8 @@
 							id="description"
 							name="description"
 							rows="4"
-							class="block p-2.5 w-full rounded border bg-gray-200 text-gray-700 border-gray-200 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-							value={selecteditem?.description}
+							class="block p-2.5 w-full rounded border bg-gray-200 text-gray-700 border-gray-200 leading-tight focus:outline-none focus:bg-white"
+							value={selecteditem?.description || ''}
 						/>
 
 						<!-- <p class="text-gray-600 text-xs italic">Make it as long and as crazy as you'd like</p> -->
@@ -418,7 +421,7 @@
 					<button
 						type="submit"
 						on:click
-						class="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+						class="inline-flex justify-center rounded-md border border-transparent bg-gray-600 text-white hover:bg-gray-800 py-2 px-4 text-sm font-medium shadow-sm"
 						>{upsertLabel}</button
 					>
 				</div>

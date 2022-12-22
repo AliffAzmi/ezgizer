@@ -47,13 +47,13 @@
 						<td class="px-6 py-4 text-sm font-medium text-right whitespace-nowrap">
 							<button>
 								<Icon
-									class=" w-6 h-6 text-gray-500 hover:text-gray-700"
+									class=" w-6 h-6 text-blue-500 hover:text-blue-700"
 									icon="material-symbols:edit-outline-sharp"
 								/>
 							</button>
 							<button>
 								<Icon
-									class=" w-6 h-6 text-gray-500 hover:text-red-700"
+									class=" w-6 h-6 text-red-500 hover:text-red-700"
 									icon="ic:round-delete-outline"
 								/></button
 							>

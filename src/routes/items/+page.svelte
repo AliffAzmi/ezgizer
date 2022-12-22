@@ -1,15 +1,16 @@
 <script>
 	import { onMount } from 'svelte';
 	import Icon from '@iconify/svelte';
-	import Table from '$lib/components/Table.svelte';
-	// import flatpickr from 'flatpickr';
+	import toast, { Toaster } from 'svelte-french-toast';
 	import Flatpickr from 'svelte-flatpickr';
+	// import flatpickr from 'flatpickr';
 	import monthSelectPlugin from 'flatpickr/dist/plugins/monthSelect';
+	import Table from '$lib/components/Table.svelte';
 	import Modal from '$lib/components/Modal.svelte';
+	import Top from '$lib/components/Top.svelte';
 
 	import 'flatpickr/dist/flatpickr.css';
 	import 'flatpickr/dist/plugins/monthSelect/style.css';
-	import Top from '../../lib/components/Top.svelte';
 
 	$: items = [];
 	$: selectedItems = [];
@@ -23,7 +24,7 @@
 		plugins: [
 			new monthSelectPlugin({
 				shorthand: true,
-				dateFormat: 'm-y',
+				dateFormat: 'm-Y',
 				altFormat: 'F Y'
 				// theme: 'dark'
 			})
@@ -35,7 +36,7 @@
 					instance.formatDate(selectedDates[1], 'U') - instance.formatDate(selectedDates[0], 'U');
 				range = range / 86400;
 
-				if (range > 60) {
+				if (range > 62) {
 					alert(
 						"You've exceed limit plan. Your maximum selection is 3 months period. Please upgrade to enjoy!"
 					);
@@ -58,6 +59,7 @@
 
 	onMount(async () => {
 		await getItems();
+		getCategories();
 	});
 
 	const removeCalendarSelection = () => {
@@ -68,6 +70,25 @@
 			s.classList.remove('inRange');
 			s.classList.remove('endRange');
 		});
+	};
+
+	const getCategories = async () => {
+		let newItems = [];
+		if (items) {
+			newItems = await Promise.all(
+				items.map(async (list) => {
+					const response = await fetch(`/api/category?value=${list.category}`, {
+						method: 'GET'
+					});
+					const payload = await response.json();
+					if (payload.category) {
+						list.category_name = payload.category.name;
+					}
+					return list;
+				})
+			);
+		}
+		items = newItems;
 	};
 
 	const getItems = async () => {
@@ -103,9 +124,27 @@
 		selected = selected;
 	};
 
-	const handleSubmit = () => {
-		console.log(period.dateStr);
-		console.log(selectedItems);
+	const handleSubmit = async () => {
+		if (period.dateStr.includes('to')) {
+			// build loop year to duplicate
+		} else {
+			const itemsData = {};
+			itemsData.user_id = '1a012aadd';
+			itemsData.month_year = period.dateStr;
+			itemsData.items = selectedItems;
+
+			try {
+				await fetch('/api/utilities', {
+					method: 'POST',
+					body: JSON.stringify(itemsData)
+				});
+				toast.success('Items duplicated to your selection period');
+				selected = [];
+				showModal = false;
+			} catch (error) {
+				toast.error('Something went wrong. Please try again.');
+			}
+		}
 	};
 </script>
 
@@ -116,6 +155,7 @@
 <Top title={'My Items'} />
 
 <div class="px-4 md:px-10 mx-auto w-full">
+	<Toaster />
 	{#if items.length}
 		<Table {items}>
 			<div slot="left_actions">
@@ -200,7 +240,7 @@
 							</td>
 							<td class="px-6 py-4 text-sm text-gray-800 whitespace-nowrap"> {item.name} </td>
 							<td class="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">
-								{item.category}
+								{item.category_name || item.category}
 							</td>
 							<td class="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">
 								RM {item.price}
@@ -226,6 +266,11 @@
 	>
 		<svelte:fragment slot="body">
 			<form on:submit|preventDefault={handleSubmit}>
+				<div class=" pb-4">
+					<h2 class=" text-sm text-gray-600">
+						Note: This action lead to replace all the items in your selection period.
+					</h2>
+				</div>
 				<div class="flex items-center gap-4">
 					<div class=" flex">
 						<Flatpickr {options} class="hidden" />
@@ -242,7 +287,7 @@
 					<button
 						class={`${
 							!period.dateStr ? 'disabled:opacity-50' : 'hover:bg-red-600 cursor-pointer'
-						} p-4 bg-red-500 text-white w-full`}
+						} p-4 bg-red-500 text-white w-full rounded`}
 						type="button"
 						disabled={period.dateStr ? false : true}
 						on:click={() => removeCalendarSelection()}
@@ -251,8 +296,8 @@
 					</button>
 					<button
 						class={`${
-							!period.dateStr ? 'disabled:opacity-50' : 'hover:bg-blue-600 cursor-pointer'
-						} p-4 bg-blue-500 text-white w-full`}
+							!period.dateStr ? 'disabled:opacity-50' : 'hover:bg-gray-800 cursor-pointer'
+						} p-4 bg-gray-700 text-white w-full rounded`}
 						type="submit"
 						disabled={period.dateStr ? false : true}
 					>
