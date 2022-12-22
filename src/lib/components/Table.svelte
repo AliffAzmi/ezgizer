@@ -1,0 +1,42 @@
+<script>
+	export let items;
+	export let loading;
+</script>
+
+<div class="flex flex-col">
+	<div class="overflow-x-auto">
+		<div class="flex justify-between py-3 pl-2">
+			<slot name="left_actions_2" />
+            <slot name="right_actions_2" />
+		</div>
+		<div class="flex justify-between py-3 pl-2">
+			<div class="relative max-w-xs">
+				<slot name="left_actions" />
+			</div>
+
+			<div class="flex items-center space-x-2">
+				<div class="relative">
+					<slot name="right_actions" />
+				</div>
+			</div>
+		</div>
+
+		<div class="p-1.5 w-full inline-block align-middle">
+			{#if loading}
+				loading...
+			{:else if items.length}
+				<div class="overflow-hidden border rounded-lg">
+					<slot name="table" />
+				</div>
+			{:else}
+				No items created
+			{/if}
+		</div>
+
+		<div class="flex flex-row-reverse space-x-2 py-3 pl-2">
+			<div class="relative">
+				<slot name="right_submit" />
+			</div>
+		</div>
+	</div>
+</div>
