@@ -3,14 +3,14 @@ const users = client.collection('users')
 
 export async function GET ({ url, params }) {
 	try {
-		const user_id = url.searchParams.get('user_id')
-		if (!user_id) {
+		const uid = params.uid || ''
+		if (!uid) {
 			return new Response(JSON.stringify({ message: 'missing user ID' }), {
 				status: 404
 			})
 		}
-		const payload = await users.find({}).sort({ id: -1 }).limit(10).toArray()
-		return new Response(JSON.stringify({ users: payload }), {
+		const payload = await users.findOne({ id: uid })
+		return new Response(JSON.stringify({ user: payload }), {
 			status: 200
 		})
 	} catch (error) {

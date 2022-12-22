@@ -13,7 +13,7 @@
 	import Top from '$lib/components/Top.svelte';
 
 	$: current_month_name = '';
-	$: current_month = 12;
+	$: current_month = '12';
 	$: current_year = 2022;
 	let showItemModal = false;
 	let loading = true;

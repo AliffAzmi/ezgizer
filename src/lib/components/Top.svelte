@@ -17,19 +17,19 @@
 		<form class="md:flex hidden flex-row flex-wrap items-center lg:ml-auto mr-3">
 			<div class="relative flex w-full flex-wrap items-stretch">
 				<span
-					class="z-10 h-full leading-snug font-normal text-center text-blueGray-300 absolute bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-3"
+					class="z-10 h-full leading-snug font-normal text-center text-gray-300 absolute bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-3"
 					><i class="fas fa-search" /></span
 				>
 				<input
 					type="text"
 					placeholder="Search here..."
-					class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 relative bg-white rounded text-sm shadow outline-none focus:outline-none focus:ring w-full pl-10"
+					class="border-0 px-3 py-3 placeholder-gray-300 text-gray-600 relative bg-white rounded text-sm shadow outline-none focus:outline-none focus:ring w-full pl-10"
 				/>
 			</div>
 		</form>
 		<ul class="flex-col md:flex-row list-none items-center hidden md:flex">
 			<div class=" relative">
-				<a class="text-blueGray-500 block" href="#pablo">
+				<a class="text-gray-500 block" href="#pablo">
 					<div class="items-center flex">
 						<button
 							on:click={() => (openUserDropDown = !openUserDropDown)}

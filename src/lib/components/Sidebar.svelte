@@ -26,7 +26,7 @@
 		</button>
 		<!-- Brand -->
 		<a
-			class="md:block text-left md:pb-2 text-blueGray-600 mr-0 inline-block whitespace-nowrap text-sm uppercase font-bold p-4 px-0"
+			class="md:block text-left md:pb-2 text-gray-600 mr-0 inline-block whitespace-nowrap text-sm uppercase font-bold p-4 px-0"
 			href="#/"
 		>
 			EzGizer
@@ -42,13 +42,13 @@
 		>
 			<!-- Collapse header -->
 			<div
-				class="md:min-w-full md:hidden block pb-4 mb-4 border-b border-solid border-blueGray-200"
+				class="md:min-w-full md:hidden block pb-4 mb-4 border-b border-solid border-gray-200"
 			>
 				<div class="flex flex-wrap">
 					<div class="w-6/12">
 						<!--  -->
 						<a
-							class="md:block text-left md:pb-2 text-blueGray-600 mr-0 inline-block whitespace-nowrap text-sm uppercase font-bold p-4 px-0"
+							class="md:block text-left md:pb-2 text-gray-600 mr-0 inline-block whitespace-nowrap text-sm uppercase font-bold p-4 px-0"
 							href="/"
 						>
 							Notus Svelte
@@ -71,7 +71,7 @@
 					<input
 						type="text"
 						placeholder="Search"
-						class=" px-3 py-2 h-12 border border-solid border-blueGray-500 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-base leading-snug shadow-none outline-none focus:outline-none w-full font-normal"
+						class=" px-3 py-2 h-12 border border-solid border-gray-500 placeholder-gray-300 text-gray-600 bg-white rounded text-base leading-snug shadow-none outline-none focus:outline-none w-full font-normal"
 					/>
 				</div>
 			</form>
@@ -79,7 +79,7 @@
 			<hr class="my-4 md:min-w-full" />
 
 			<h6
-				class="md:min-w-full text-blueGray-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline"
+				class="md:min-w-full text-gray-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline"
 			>
 				Dashboard
 			</h6>

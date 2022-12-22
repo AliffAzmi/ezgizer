@@ -1,5 +1,42 @@
 <script>
+	import { onMount } from 'svelte';
+	// import { page } from '$app/stores';
 	import Top from '$lib/components/Top.svelte';
+	import Icon from '@iconify/svelte';
+
+	let income = 0;
+	let pendingFigure = 0;
+	let spentFigure = 0;
+	let performanceFigure = '0%';
+	onMount(async () => {
+		const { id } = await getUsers();
+		const { pending, spent, performance } = await getOverallReports(id);
+		pendingFigure = new Intl.NumberFormat('ta-MY', { style: 'currency', currency: 'MYR' }).format(
+			pending
+		);
+		spentFigure = new Intl.NumberFormat('ta-MY', { style: 'currency', currency: 'MYR' }).format(
+			spent
+		);
+		performanceFigure = performance;
+	});
+
+	const getOverallReports = async (id) => {
+		const response = await fetch('/api/reports/overall?user_id=1a012aadd&period=12-2022', {
+			method: 'GET'
+		});
+		return await response.json();
+	};
+
+	const getUsers = async () => {
+		const response = await fetch('/api/users/1a012aadd', {
+			method: 'GET'
+		});
+		const { user } = await response.json();
+		income = user.income
+			? new Intl.NumberFormat('ta-MY', { style: 'currency', currency: 'MYR' }).format(user.income)
+			: 0 || 0;
+		return user;
+	};
 </script>
 
 <svelte:head>
@@ -19,20 +56,20 @@
 						<div class="flex-auto p-4">
 							<div class="flex flex-wrap">
 								<div class="relative w-full pr-4 max-w-full flex-grow flex-1">
-									<h5 class="text-blueGray-400 uppercase font-bold text-xs">TRAFFIC</h5>
-									<span class="font-semibold text-xl text-blueGray-700">350,897</span>
+									<h5 class="text-gray-400 uppercase font-bold text-xs">INCOME</h5>
+									<span class="font-semibold text-xl text-gray-700">{income}</span>
 								</div>
 								<div class="relative w-auto pl-4 flex-initial">
 									<div
 										class="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 shadow-lg rounded-full bg-red-500"
 									>
-										<i class="far fa-chart-bar" />
+										<Icon class=" w-6 h-6" icon="material-symbols:attach-money" />
 									</div>
 								</div>
 							</div>
-							<p class="text-sm text-blueGray-400 mt-4">
+							<p class="text-sm text-gray-400 mt-4">
 								<span class="mr-2 text-emerald-500"><i class="fas fa-arrow-up" /> 3.48%</span>
-								<span class="whitespace-nowrap">Since last month</span>
+								<span class="whitespace-nowrap">Higher</span>
 							</p>
 						</div>
 					</div>
@@ -44,19 +81,19 @@
 						<div class="flex-auto p-4">
 							<div class="flex flex-wrap">
 								<div class="relative w-full pr-4 max-w-full flex-grow flex-1">
-									<h5 class="text-blueGray-400 uppercase font-bold text-xs">NEW USERS</h5>
-									<span class="font-semibold text-xl text-blueGray-700">2,356</span>
+									<h5 class="text-gray-400 uppercase font-bold text-xs">PENDING</h5>
+									<span class="font-semibold text-xl text-gray-700">{pendingFigure}</span>
 								</div>
 								<div class="relative w-auto pl-4 flex-initial">
 									<div
 										class="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 shadow-lg rounded-full bg-orange-500"
 									>
-										<i class="fas fa-chart-pie" />
+										<Icon class=" w-6 h-6" icon="material-symbols:pending-actions-rounded" />
 									</div>
 								</div>
 							</div>
-							<p class="text-sm text-blueGray-400 mt-4">
-								<span class="mr-2 text-red-500"><i class="fas fa-arrow-down" /> 3.48%</span>
+							<p class="text-sm text-gray-400 mt-4">
+								<span class="mr-2 text-red-500"> 3.48%</span>
 								<span class="whitespace-nowrap">Since last week</span>
 							</p>
 						</div>
@@ -69,18 +106,18 @@
 						<div class="flex-auto p-4">
 							<div class="flex flex-wrap">
 								<div class="relative w-full pr-4 max-w-full flex-grow flex-1">
-									<h5 class="text-blueGray-400 uppercase font-bold text-xs">SALES</h5>
-									<span class="font-semibold text-xl text-blueGray-700">924</span>
+									<h5 class="text-gray-400 uppercase font-bold text-xs">SPENT</h5>
+									<span class="font-semibold text-xl text-gray-700">{spentFigure}</span>
 								</div>
 								<div class="relative w-auto pl-4 flex-initial">
 									<div
 										class="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 shadow-lg rounded-full bg-pink-500"
 									>
-										<i class="fas fa-users" />
+										<Icon class=" w-6 h-6" icon="ic:twotone-download-done" />
 									</div>
 								</div>
 							</div>
-							<p class="text-sm text-blueGray-400 mt-4">
+							<p class="text-sm text-gray-400 mt-4">
 								<span class="mr-2 text-orange-500"><i class="fas fa-arrow-down" /> 1.10%</span>
 								<span class="whitespace-nowrap">Since yesterday</span>
 							</p>
@@ -94,18 +131,18 @@
 						<div class="flex-auto p-4">
 							<div class="flex flex-wrap">
 								<div class="relative w-full pr-4 max-w-full flex-grow flex-1">
-									<h5 class="text-blueGray-400 uppercase font-bold text-xs">PERFORMANCE</h5>
-									<span class="font-semibold text-xl text-blueGray-700">49,65%</span>
+									<h5 class="text-gray-400 uppercase font-bold text-xs">PERFORMANCE</h5>
+									<span class="font-semibold text-xl text-gray-700">{performanceFigure}</span>
 								</div>
 								<div class="relative w-auto pl-4 flex-initial">
 									<div
 										class="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 shadow-lg rounded-full bg-emerald-500"
 									>
-										<i class="fas fa-percent" />
+										<Icon class=" w-6 h-6" icon="mdi:performance" />
 									</div>
 								</div>
 							</div>
-							<p class="text-sm text-blueGray-400 mt-4">
+							<p class="text-sm text-gray-400 mt-4">
 								<span class="mr-2 text-emerald-500"><i class="fas fa-arrow-up" /> 12%</span>
 								<span class="whitespace-nowrap">Since last month</span>
 							</p>
@@ -125,7 +162,7 @@
 				<div class="rounded-t mb-0 px-4 py-3 border-0">
 					<div class="flex flex-wrap items-center">
 						<div class="relative w-full px-4 max-w-full flex-grow flex-1">
-							<h3 class="font-semibold text-base text-blueGray-700">Page visits</h3>
+							<h3 class="font-semibold text-base text-gray-700">Page visits</h3>
 						</div>
 						<div class="relative w-full px-4 max-w-full flex-grow flex-1 text-right">
 							<button
@@ -140,19 +177,19 @@
 						<thead
 							><tr
 								><th
-									class="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
+									class="px-6 bg-gray-50 text-gray-500 align-middle border border-solid border-gray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
 									>Page name</th
 								>
 								<th
-									class="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
+									class="px-6 bg-gray-50 text-gray-500 align-middle border border-solid border-gray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
 									>Visitors</th
 								>
 								<th
-									class="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
+									class="px-6 bg-gray-50 text-gray-500 align-middle border border-solid border-gray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
 									>Unique users</th
 								>
 								<th
-									class="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
+									class="px-6 bg-gray-50 text-gray-500 align-middle border border-solid border-gray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
 									>Bounce rate</th
 								></tr
 							></thead
@@ -265,7 +302,7 @@
 				<div class="rounded-t mb-0 px-4 py-3 border-0">
 					<div class="flex flex-wrap items-center">
 						<div class="relative w-full px-4 max-w-full flex-grow flex-1">
-							<h3 class="font-semibold text-base text-blueGray-700">Social traffic</h3>
+							<h3 class="font-semibold text-base text-gray-700">Social traffic</h3>
 						</div>
 						<div class="relative w-full px-4 max-w-full flex-grow flex-1 text-right">
 							<button
@@ -280,15 +317,15 @@
 						<thead class="thead-light"
 							><tr
 								><th
-									class="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
+									class="px-6 bg-gray-50 text-gray-500 align-middle border border-solid border-gray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
 									>Referral</th
 								>
 								<th
-									class="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
+									class="px-6 bg-gray-50 text-gray-500 align-middle border border-solid border-gray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
 									>Visitors</th
 								>
 								<th
-									class="px-6 bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left min-w-140-px"
+									class="px-6 bg-gray-50 text-gray-500 align-middle border border-solid border-gray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left min-w-140-px"
 								/></tr
 							></thead
 						>
