@@ -109,6 +109,13 @@
 		await getUtilities();
 		handleGetMonthTranslation();
 	};
+	const handleToggleOne = async (e, item) => {
+		if (item._id) {
+			$items.find((itm) => itm._id === item._id).status = e.target.checked ? 1 : 0;
+		} else {
+			$items.find((itm) => itm.id === item.id).status = e.target.checked ? 1 : 0;
+		}
+	};
 </script>
 
 <svelte:head>
@@ -232,7 +239,7 @@
 							<input
 								type="checkbox"
 								checked={item?.status ? true : false}
-								on:change={(e) => ($items.find((itm) => itm.id === item.id).status = !item.status)}
+								on:change={(e) => handleToggleOne(e, item)}
 								value={1}
 							/>
 						</td>
@@ -257,14 +264,11 @@
 
 		<div slot="right_submit">
 			<button
-				class="relative z-0 inline-flex text-sm rounded-md shadow-sm focus:ring-accent-500 focus:border-accent-500 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1"
+				on:click={() => handleSubmit()}
+				type="submit"
+				class="inline-flex justify-center rounded-md border border-transparent bg-gray-600 text-white hover:bg-gray-800 py-2 px-4 text-sm font-medium shadow-sm"
+				>Save</button
 			>
-				<span
-					class="relative inline-flex items-center px-3 py-3 space-x-2 text-sm font-medium text-gray-600 bg-white border border-gray-300 rounded-md sm:py-2"
-				>
-					<button class=" button" on:click={() => handleSubmit()}>Save</button>
-				</span>
-			</button>
 		</div>
 	</Table>
 

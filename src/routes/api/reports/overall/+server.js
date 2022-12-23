@@ -17,6 +17,8 @@ export async function GET ({ url, params }) {
 		if (payload) {
 			const { items } = payload
 
+			const total = items.reduce((n, { price }) => parseInt(n) + parseInt(price), 0)
+
 			const pending = items
 				.filter(it => !it.status || it.status === 0 || it.status === false)
 				.reduce((n, { price }) => parseInt(n) + parseInt(price), 0)
@@ -27,7 +29,7 @@ export async function GET ({ url, params }) {
 
 			const performance = '20.5%'
 
-			return new Response(JSON.stringify({ pending, spent, performance }), {
+			return new Response(JSON.stringify({ total, pending, spent, performance }), {
 				status: 200
 			})
 		} else {

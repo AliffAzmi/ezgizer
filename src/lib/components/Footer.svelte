@@ -12,7 +12,7 @@
 				</div>
 			</div>
 			<div class="w-full md:w-8/12 px-4">
-				<ul class="flex flex-wrap list-none md:justify-end justify-center">
+				<!-- <ul class="flex flex-wrap list-none md:justify-end justify-center">
 					<li>
 						<a
 							href="https://www.creative-tim.com/presentation?ref=ns-footer-admin"
@@ -20,7 +20,7 @@
 							>About Us</a
 						>
 					</li>
-				</ul>
+				</ul> -->
 			</div>
 		</div>
 	</div>

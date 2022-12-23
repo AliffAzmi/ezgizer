@@ -24,28 +24,26 @@ export async function POST ({ request, response }) {
 	try {
 		var payload = await request.json()
 		payload.items.map(async item => {
-			try {
-				await items.updateMany(
-					{ name: item.name },
-					{
-						$set: {
-							name: item.name,
-							price: parseInt(item.price),
-							category: item.category,
-							user_id: payload.user_id
-						}
-					},
-					{ upsert: true }
-				)
-			} catch (error) {
-				console.log(error)
-			}
+			await items.updateMany(
+				{ name: item.name },
+				{
+					$set: {
+						name: item.name,
+						price: parseInt(item.price),
+						category: item.category,
+						user_id: payload.user_id
+					}
+				},
+				{ upsert: true }
+			)
 		})
 
 		return new Response(JSON.stringify({ message: 'ok' }), {
 			status: 200
 		})
 	} catch (error) {
-		return error
+		return new Response(JSON.stringify({ message: error.message }), {
+			status: 500
+		})
 	}
 }

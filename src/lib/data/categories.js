@@ -29,7 +29,7 @@ const categories = [
 	},
 	{
 		name: 'Water & Sewage',
-		value: 'water_&_sewage'
+		value: 'water_sewage'
 	}
 ]
 

@@ -18,6 +18,7 @@
 		"@sveltejs/kit": "next",
 		"autoprefixer": "^10.4.13",
 		"flatpickr": "^4.6.13",
+		"md5": "^2.3.0",
 		"mongodb": "^4.12.1",
 		"postcss": "^8.4.19",
 		"prettier": "^2.6.2",

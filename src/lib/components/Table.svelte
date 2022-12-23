@@ -23,11 +23,11 @@
 			</div>
 		</div>
 
-		<div class="p-1.5 w-full inline-block align-middle">
+		<div class="p-1.5 w-full inline-block align-middle overflow-x-auto">
 			{#if loading}
 				loading...
 			{:else if items.length}
-				<div class="overflow-hidden border rounded-lg">
+				<div class=" border rounded-lg">
 					<slot name="table" />
 				</div>
 			{:else}

@@ -4,13 +4,17 @@
 	import Top from '$lib/components/Top.svelte';
 	import Icon from '@iconify/svelte';
 
-	let income = 0;
+	let totalFigure = 0;
 	let pendingFigure = 0;
 	let spentFigure = 0;
 	let performanceFigure = '0%';
 	onMount(async () => {
 		const { id } = await getUsers();
-		const { pending, spent, performance } = await getOverallReports(id);
+		const { total, pending, spent, performance } = await getOverallReports(id);
+
+		totalFigure = new Intl.NumberFormat('ta-MY', { style: 'currency', currency: 'MYR' }).format(
+			total
+		);
 		pendingFigure = new Intl.NumberFormat('ta-MY', { style: 'currency', currency: 'MYR' }).format(
 			pending
 		);
@@ -32,9 +36,6 @@
 			method: 'GET'
 		});
 		const { user } = await response.json();
-		income = user.income
-			? new Intl.NumberFormat('ta-MY', { style: 'currency', currency: 'MYR' }).format(user.income)
-			: 0 || 0;
 		return user;
 	};
 </script>
@@ -56,8 +57,8 @@
 						<div class="flex-auto p-4">
 							<div class="flex flex-wrap">
 								<div class="relative w-full pr-4 max-w-full flex-grow flex-1">
-									<h5 class="text-gray-400 uppercase font-bold text-xs">INCOME</h5>
-									<span class="font-semibold text-xl text-gray-700">{income}</span>
+									<h5 class="text-gray-400 uppercase font-bold text-xs">TOTAL</h5>
+									<span class="font-semibold text-xl text-gray-700">{totalFigure}</span>
 								</div>
 								<div class="relative w-auto pl-4 flex-initial">
 									<div
@@ -69,7 +70,7 @@
 							</div>
 							<p class="text-sm text-gray-400 mt-4">
 								<span class="mr-2 text-emerald-500"><i class="fas fa-arrow-up" /> 3.48%</span>
-								<span class="whitespace-nowrap">Higher</span>
+								<span class="whitespace-nowrap">Higher prev month</span>
 							</p>
 						</div>
 					</div>

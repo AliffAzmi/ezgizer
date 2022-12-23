@@ -1,4 +1,5 @@
 import client from '$lib/db'
+import md5 from 'md5'
 // import { ObjectId } from 'mongodb'
 const utilities = client.collection('utilities')
 
@@ -25,6 +26,7 @@ export async function POST ({ request, response }) {
 	try {
 		var payload = await request.json()
 		payload.items.filter(item => delete item.idx)
+		payload.items.map(item => (item.id = md5(item.name)))
 		try {
 			await utilities.updateOne(
 				{ $and: [{ user_id: payload.user_id, month_year: payload.month_year }] },
