@@ -7,10 +7,13 @@
 	let totalFigure = 0;
 	let pendingFigure = 0;
 	let spentFigure = 0;
+	let mostUtilitesList = [];
+	let mostCategoriesList = [];
 	let performanceFigure = '0%';
 	onMount(async () => {
 		const { id } = await getUsers();
-		const { total, pending, spent, performance } = await getOverallReports(id);
+		const { total, pending, spent, performance, most_utilities, most_categories } =
+			await getOverallReports(id);
 
 		totalFigure = new Intl.NumberFormat('ta-MY', { style: 'currency', currency: 'MYR' }).format(
 			total
@@ -22,6 +25,8 @@
 			spent
 		);
 		performanceFigure = performance;
+		mostUtilitesList = most_utilities;
+		mostCategoriesList = most_categories;
 	});
 
 	const getOverallReports = async (id) => {
@@ -163,7 +168,7 @@
 				<div class="rounded-t mb-0 px-4 py-3 border-0">
 					<div class="flex flex-wrap items-center">
 						<div class="relative w-full px-4 max-w-full flex-grow flex-1">
-							<h3 class="font-semibold text-base text-gray-700">Page visits</h3>
+							<h3 class="font-semibold text-base text-gray-700">Utilities</h3>
 						</div>
 						<div class="relative w-full px-4 max-w-full flex-grow flex-1 text-right">
 							<button
@@ -175,123 +180,44 @@
 				</div>
 				<div class="block w-full overflow-x-auto">
 					<table class="items-center w-full bg-transparent border-collapse">
-						<thead
-							><tr
-								><th
-									class="px-6 bg-gray-50 text-gray-500 align-middle border border-solid border-gray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
-									>Page name</th
-								>
+						<thead>
+							<tr>
 								<th
 									class="px-6 bg-gray-50 text-gray-500 align-middle border border-solid border-gray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
-									>Visitors</th
 								>
+									Name
+								</th>
 								<th
 									class="px-6 bg-gray-50 text-gray-500 align-middle border border-solid border-gray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
-									>Unique users</th
+									>Price</th
 								>
-								<th
-									class="px-6 bg-gray-50 text-gray-500 align-middle border border-solid border-gray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
-									>Bounce rate</th
-								></tr
-							></thead
-						>
-						<tbody
-							><tr
-								><th
-									class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left"
-									>/argon/</th
-								>
-								<td
-									class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-									>4,569</td
-								>
-								<td
-									class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-									>340</td
-								>
-								<td
-									class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-									><i class="fas fa-arrow-up text-emerald-500 mr-4" />
-									46,53%</td
-								></tr
-							>
-							<tr
-								><th
-									class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left"
-									>/argon/index.html</th
-								>
-								<td
-									class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-									>3,985</td
-								>
-								<td
-									class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-									>319</td
-								>
-								<td
-									class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-									><i class="fas fa-arrow-down text-orange-500 mr-4" />
-									46,53%</td
-								></tr
-							>
-							<tr
-								><th
-									class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left"
-									>/argon/charts.html</th
-								>
-								<td
-									class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-									>3,513</td
-								>
-								<td
-									class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-									>294</td
-								>
-								<td
-									class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-									><i class="fas fa-arrow-down text-orange-500 mr-4" />
-									36,49%</td
-								></tr
-							>
-							<tr
-								><th
-									class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left"
-									>/argon/tables.html</th
-								>
-								<td
-									class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-									>2,050</td
-								>
-								<td
-									class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-									>147</td
-								>
-								<td
-									class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-									><i class="fas fa-arrow-up text-emerald-500 mr-4" />
-									50,87%</td
-								></tr
-							>
-							<tr
-								><th
-									class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left"
-									>/argon/profile.html</th
-								>
-								<td
-									class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-									>1,795</td
-								>
-								<td
-									class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-									>190</td
-								>
-								<td
-									class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-									><i class="fas fa-arrow-down text-red-500 mr-4" />
-									46,53%</td
-								></tr
-							></tbody
-						>
+							</tr>
+						</thead>
+						<tbody>
+							{#each mostUtilitesList as utility}
+								<tr>
+									<th
+										class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left"
+									>
+										{utility.name}
+									</th>
+									<td
+										class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
+									>
+										{utility.price}
+									</td>
+									<!-- <td
+										class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
+										>340</td
+									>
+									<td
+										class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
+										><i class="fas fa-arrow-up text-emerald-500 mr-4" />
+										46,53%</td
+									> -->
+								</tr>
+							{/each}
+						</tbody>
 					</table>
 				</div>
 			</div>
@@ -303,7 +229,7 @@
 				<div class="rounded-t mb-0 px-4 py-3 border-0">
 					<div class="flex flex-wrap items-center">
 						<div class="relative w-full px-4 max-w-full flex-grow flex-1">
-							<h3 class="font-semibold text-base text-gray-700">Social traffic</h3>
+							<h3 class="font-semibold text-base text-gray-700">Categories</h3>
 						</div>
 						<div class="relative w-full px-4 max-w-full flex-grow flex-1 text-right">
 							<button
@@ -315,143 +241,50 @@
 				</div>
 				<div class="block w-full overflow-x-auto">
 					<table class="items-center w-full bg-transparent border-collapse">
-						<thead class="thead-light"
-							><tr
-								><th
+						<thead class="thead-light">
+							<tr>
+								<th
 									class="px-6 bg-gray-50 text-gray-500 align-middle border border-solid border-gray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
-									>Referral</th
+									>Category</th
 								>
 								<th
 									class="px-6 bg-gray-50 text-gray-500 align-middle border border-solid border-gray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
-									>Visitors</th
+									>Price</th
 								>
 								<th
 									class="px-6 bg-gray-50 text-gray-500 align-middle border border-solid border-gray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left min-w-140-px"
-								/></tr
-							></thead
-						>
-						<tbody
-							><tr
-								><th
-									class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left"
-									>Facebook</th
+									>Txns</th
 								>
-								<td
-									class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-									>1,480</td
-								>
-								<td
-									class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-									><div class="flex items-center">
-										<span class="mr-2">60%</span>
-										<div class="relative w-full">
-											<div class="overflow-hidden h-2 text-xs flex rounded bg-red-200">
-												<div
-													style="width: 60%;"
-													class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-red-500"
-												/>
-											</div>
+							</tr>
+						</thead>
+						<tbody>
+							{#each mostCategoriesList as category}
+								<tr>
+									<th
+										class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left"
+										>{category.name}</th
+									>
+									<td
+										class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
+										>{category.price}</td
+									>
+									<td
+										class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
+										><div class="flex items-center">
+											<span class="mr-2">{category.txns}</span>
+											<!-- <div class="relative w-full">
+										<div class="overflow-hidden h-2 text-xs flex rounded bg-red-200">
+											<div
+												style="width: 60%;"
+												class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-red-500"
+											/>
 										</div>
-									</div></td
-								></tr
-							>
-							<tr
-								><th
-									class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left"
-									>Facebook</th
-								>
-								<td
-									class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-									>5,480</td
-								>
-								<td
-									class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-									><div class="flex items-center">
-										<span class="mr-2">70%</span>
-										<div class="relative w-full">
-											<div class="overflow-hidden h-2 text-xs flex rounded bg-emerald-200">
-												<div
-													style="width: 70%;"
-													class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-emerald-500"
-												/>
-											</div>
+									</div> -->
 										</div>
-									</div></td
-								></tr
-							>
-							<tr
-								><th
-									class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left"
-									>Google</th
-								>
-								<td
-									class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-									>4,807</td
-								>
-								<td
-									class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-									><div class="flex items-center">
-										<span class="mr-2">80%</span>
-										<div class="relative w-full">
-											<div class="overflow-hidden h-2 text-xs flex rounded bg-purple-200">
-												<div
-													style="width: 80%;"
-													class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-purple-500"
-												/>
-											</div>
-										</div>
-									</div></td
-								></tr
-							>
-							<tr
-								><th
-									class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left"
-									>Instagram</th
-								>
-								<td
-									class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-									>3,678</td
-								>
-								<td
-									class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-									><div class="flex items-center">
-										<span class="mr-2">75%</span>
-										<div class="relative w-full">
-											<div class="overflow-hidden h-2 text-xs flex rounded bg-lightBlue-200">
-												<div
-													style="width: 75%;"
-													class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-lightBlue-500"
-												/>
-											</div>
-										</div>
-									</div></td
-								></tr
-							>
-							<tr
-								><th
-									class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left"
-									>twitter</th
-								>
-								<td
-									class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-									>2,645</td
-								>
-								<td
-									class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-									><div class="flex items-center">
-										<span class="mr-2">30%</span>
-										<div class="relative w-full">
-											<div class="overflow-hidden h-2 text-xs flex rounded bg-orange-200">
-												<div
-													style="width: 30%;"
-													class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-orange-500"
-												/>
-											</div>
-										</div>
-									</div></td
-								></tr
-							></tbody
-						>
+									</td>
+								</tr>
+							{/each}
+						</tbody>
 					</table>
 				</div>
 			</div>
