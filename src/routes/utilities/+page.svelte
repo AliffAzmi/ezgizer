@@ -12,15 +12,25 @@
 	import Table from '$lib/components/Table.svelte';
 	import Top from '$lib/components/Top.svelte';
 
-	$: current_month_name = '';
-	$: current_month = '12';
-	$: current_year = 2022;
+	$: current_month_name =
+		months.find(
+			(m) =>
+				m.value ===
+				new Date().toLocaleString('en-US', { month: '2-digit', timeZone: 'Asia/Singapore' })
+		).name || 'January';
+	$: current_month = `${
+		new Date().toLocaleString('en-US', { month: '2-digit', timeZone: 'Asia/Singapore' }) || '12'
+	}`;
+	$: current_year = new Date().getFullYear() || 2022;
 	let showItemModal = false;
 	let loading = true;
 	let upsertLabel = 'Create';
 	let selecteditem = {};
 	let showYear = false;
 	let container;
+	let currentStatus = 'All';
+	let queries = {};
+	$: sortValue = true;
 
 	onMount(async () => {
 		await getUtilities();
@@ -34,9 +44,14 @@
 	const getUtilities = async () => {
 		const user_id = '1a012aadd';
 		const month_year = `${current_month}-${current_year}`;
-		const response = await fetch(`/api/utilities?user_id=${user_id}&month_year=${month_year}`, {
-			method: 'GET'
-		});
+		const response = await fetch(
+			`/api/utilities?user_id=${user_id}&month_year=${month_year}&queries=${JSON.stringify(
+				queries
+			)}`,
+			{
+				method: 'GET'
+			}
+		);
 
 		const payload = await response.json();
 		if (payload?.items) {
@@ -117,6 +132,27 @@
 			$items.find((itm) => itm.id === item.id).status = e.target.checked ? 1 : 0;
 		}
 	};
+	const handleChangeQuery = async ({ status, q, sort }) => {
+		if (status || status === 0) {
+			if (status === 'all') {
+				delete queries.status;
+			} else {
+				queries.status = status;
+			}
+			currentStatus =
+				status === 1 ? 'Completed' : status === 0 ? 'Pending' : status === 'all' ? 'All' : 'All';
+			await getUtilities();
+		}
+		if (q) {
+			$items = $items.filter((item) => !item.name.search(new RegExp(q, 'i')));
+		} else {
+			await getUtilities();
+		}
+
+		$items = $items.sort((a, b) =>
+			sort ? parseInt(b.price) - parseInt(a.price) : parseInt(a.price) - parseInt(b.price)
+		);
+	};
 
 	const getCategoryName = async (val) => {
 		const res = await fetch(`/api/category?value=${val}`, { method: 'GET' });
@@ -180,7 +216,6 @@
 				</div>
 			{/if}
 		</div>
-		<!-- {current_year} -->
 	</div>
 
 	<Table {loading} items={$items}>
@@ -198,30 +233,48 @@
 						on:click={() => showDropdownOptions()}
 						class="flex flex-row justify-between w-32 px-2 py-2 text-gray-700 bg-white rounded-md border border-gray-300"
 					>
-						<span class="select-none">Status: All</span>
+						<span class="select-none">Status: {currentStatus}</span>
 
 						<Icon id="arrow-down" class="hidden w-5 h-5 stroke-current" icon="mdi:chevron-down" />
 						<Icon id="arrow-up" class="w-5 h-5 stroke-current" icon="mdi:chevron-up" />
 					</button>
 					<div id="options" class="hidden absolute w-32 py-2 mt-2 bg-white rounded-lg shadow-xl">
-						<button class="block px-4 py-2 text-gray-800">Completed</button>
-						<button class="block px-4 py-2 text-gray-800">Pending</button>
+						<button
+							on:click={() => handleChangeQuery({ status: 'all' })}
+							class="block px-4 py-2 text-gray-800">All</button
+						>
+						<button
+							on:click={() => handleChangeQuery({ status: 1 })}
+							class="block px-4 py-2 text-gray-800">Completed</button
+						>
+						<button
+							on:click={() => handleChangeQuery({ status: 0 })}
+							class="block px-4 py-2 text-gray-800">Pending</button
+						>
 					</div>
 				</div>
 			</div>
 			<!-- </button> -->
 			<div class="relative flex w-full flex-wrap items-stretch">
 				<span
-					class="z-10 h-full leading-snug font-normal text-center text-gray-300 absolute bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-2"
+					class=" md:hidden relative inline-flex items-center px-3 py-3 space-x-2 text-sm font-medium text-gray-600 bg-white border border-gray-300 rounded-md sm:py-2"
 				>
-					<!-- <i class="fas fa-search" /> -->
-					<Icon class=" w-5 h-5" icon="ic:round-search" />
+					<Icon class="w-3 h-3" icon="ic:round-search" />
 				</span>
-				<input
-					type="text"
-					placeholder="Search here..."
-					class="border-0 px-3 py-2 placeholder-gray-300 text-gray-600 relative bg-white rounded text-sm shadow outline-none focus:outline-none focus:ring w-full pl-10"
-				/>
+
+				<div class="hidden md:block">
+					<span
+						class="z-10 h-full leading-snug font-normal text-center text-gray-300 absolute bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-3"
+					>
+						<Icon class=" w-4 h-4" icon="ic:round-search" />
+					</span>
+					<input
+						on:input={(e) => handleChangeQuery({ q: e.target.value })}
+						type="text"
+						placeholder="Search name"
+						class="border-0 px-2 py-2 placeholder-gray-300 text-gray-600 relative bg-white rounded text-sm shadow outline-none focus:outline-none focus:ring w-full pl-10"
+					/>
+				</div>
 			</div>
 			<!-- </form> -->
 		</div>
@@ -251,7 +304,7 @@
 				class="relative z-0 inline-flex text-sm rounded-md shadow-sm focus:ring-accent-500 focus:border-accent-500 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1"
 			>
 				<span
-					class="relative inline-flex items-center px-3 py-3 space-x-2 text-sm font-medium text-gray-600 bg-white border border-gray-300 rounded-md sm:py-2"
+					class="relative inline-flex items-center px-3 py-2 space-x-2 text-sm font-medium text-gray-600 bg-white border border-gray-300 rounded-md sm:py-2"
 				>
 					<Icon class=" w-4 h-4" icon="material-symbols:add" /> Add New
 				</span>
@@ -277,8 +330,17 @@
 					<th scope="col" class="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase ">
 						Category
 					</th>
-					<th scope="col" class="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase ">
-						Price
+					<th scope="col" class="px-6 py-3 ">
+						<button
+							class=" flex items-center gap-2 cursor-pointer"
+							on:click={() => {
+								sortValue = !sortValue;
+								handleChangeQuery({ sort: sortValue });
+							}}
+						>
+							<span class="text-xs font-bold text-left text-gray-500 uppercase">Price</span>
+							<Icon icon="bxs:sort-alt" />
+						</button>
 					</th>
 					<th scope="col" class="px-6 py-3 text-xs font-bold text-right text-gray-500 uppercase ">
 						Status

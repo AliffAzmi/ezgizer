@@ -4,6 +4,7 @@
 	import routes from '$lib/routes';
 	import Icon from '@iconify/svelte';
 
+	let openUserDropDown = false;
 	let collapseShow = 'hidden';
 	function toggleCollapseShow(classes) {
 		collapseShow = classes;
@@ -33,9 +34,45 @@
 		</a>
 		<!-- User -->
 		<ul class="md:hidden items-center flex flex-wrap list-none">
-			<li class="inline-block relative" />
-			<li class="inline-block relative" />
+			<li class="inline-block relative">
+				<div class="items-center flex">
+					<button
+						on:click={() => (openUserDropDown = !openUserDropDown)}
+						class="w-12 h-12 text-sm text-white bg-gray-200 inline-flex items-center justify-center rounded-full"
+					>
+						<img
+							alt="..."
+							class="w-full rounded-full align-middle border-none shadow-lg"
+							src={$page.data.session.user.image || 'http://source.unsplash.com/800x800/?tree'}
+						/>
+					</button>
+				</div>
+				{#if openUserDropDown}
+					<div
+						class="bg-white text-base z-50 float-left py-2 list-none text-left rounded shadow-lg min-w-48 absolute right-0"
+					>
+						<div class="flex items-center gap-2 py-2 px-4">
+							<Icon class=" w-5 h-6" icon="ep:setting" />
+							<a
+								href="#nothingness"
+								class="text-sm font-normal block w-full whitespace-nowrap bg-transparent text-gray-700"
+								>Settings</a
+							>
+						</div>
+						<div class="h-0 my-2 border border-solid border-gray-100" />
+
+						<div class="flex items-center gap-2 py-2 px-4">
+							<Icon class=" w-5 h-6" icon="mdi:sign-out" />
+							<button
+								class="text-sm font-normal block w-full whitespace-nowrap bg-transparent text-gray-700"
+								on:click={() => signOut()}>Logout</button
+							>
+						</div>
+					</div>
+				{/if}
+			</li>
 		</ul>
+
 		<!-- Collapse -->
 		<div
 			class="md:flex md:flex-col md:items-stretch md:opacity-100 md:relative md:mt-4 md:shadow-none shadow absolute top-0 left-0 right-0 z-40 overflow-y-auto overflow-x-hidden h-screen items-center flex-1 rounded {collapseShow}"

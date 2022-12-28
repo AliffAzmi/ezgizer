@@ -14,23 +14,21 @@
 		class="w-full mx-autp items-center flex justify-between md:flex-nowrap flex-wrap md:px-10 px-4"
 	>
 		<div class="text-sm uppercase hidden lg:inline-block font-semibold">{title}</div>
-		
+
 		<ul class="flex-col md:flex-row list-none items-center hidden md:flex">
 			<div class=" relative">
-				<a class="text-gray-500 block" href="#pablo">
-					<div class="items-center flex">
-						<button
-							on:click={() => (openUserDropDown = !openUserDropDown)}
-							class="w-12 h-12 text-sm text-white bg-gray-200 inline-flex items-center justify-center rounded-full"
-						>
-							<img
-								alt="..."
-								class="w-full rounded-full align-middle border-none shadow-lg"
-								src={$page.data.session.user.image || 'http://source.unsplash.com/800x800/?tree'}
-							/>
-						</button>
-					</div>
-				</a>
+				<div class="items-center flex">
+					<button
+						on:click={() => (openUserDropDown = !openUserDropDown)}
+						class="w-12 h-12 text-sm text-white bg-gray-200 inline-flex items-center justify-center rounded-full"
+					>
+						<img
+							alt="..."
+							class="w-full rounded-full align-middle border-none shadow-lg"
+							src={$page.data.session.user.image || 'http://source.unsplash.com/800x800/?tree'}
+						/>
+					</button>
+				</div>
 				{#if openUserDropDown}
 					<div
 						class="bg-white text-base z-50 float-left py-2 list-none text-left rounded shadow-lg min-w-48 absolute right-0"

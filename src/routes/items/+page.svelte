@@ -198,6 +198,13 @@
 		});
 		toast.success('Saved!');
 	};
+	const handleSearch = async (value) => {
+		if (value) {
+			items = items.filter((item) => !item.name.search(new RegExp(value, 'i')));
+		} else {
+			await getItems();
+		}
+	};
 </script>
 
 <svelte:head>
@@ -261,8 +268,9 @@
 						<Icon class=" w-4 h-4" icon="ic:round-search" />
 					</span>
 					<input
+						on:input={(e) => handleSearch(e.target.value)}
 						type="text"
-						placeholder="Search here..."
+						placeholder="Search name"
 						class="border-0 px-2 py-2 placeholder-gray-300 text-gray-600 relative bg-white rounded text-sm shadow outline-none focus:outline-none focus:ring w-full pl-10"
 					/>
 				</div>
@@ -275,7 +283,7 @@
 				class="relative z-0 inline-flex text-sm rounded-md shadow-sm focus:ring-accent-500 focus:border-accent-500 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1"
 			>
 				<span
-					class="relative inline-flex items-center px-3 py-3 space-x-2 text-sm font-medium text-gray-600 bg-white border border-gray-300 rounded-md sm:py-2"
+					class="relative inline-flex items-center px-3 py-2 space-x-2 text-sm font-medium text-gray-600 bg-white border border-gray-300 rounded-md sm:py-2"
 				>
 					<Icon class=" w-4 h-4" icon="material-symbols:add" /> Add New
 				</span>
@@ -331,7 +339,7 @@
 							{i + 1}
 						</td>
 						<td class="px-6 py-4 text-sm text-gray-800 whitespace-nowrap"> {item.name} </td>
-						<td class="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">
+						<td class="px-6 py-4 text-sm text-gray-800 whitespace-nowrap w-[20%]">
 							{item.category_name || item.category}
 						</td>
 						<td class="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">
@@ -513,37 +521,6 @@
 								value={selectedItems?.price ? selectedItems.price : ''}
 							/>
 						</div>
-					</div>
-					<div class="w-full md:w-1/3 px-3 mb-6 md:mb-0">
-						<label
-							class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-							for="status"
-						>
-							Status
-						</label>
-						<input
-							type="checkbox"
-							name="status"
-							id="status"
-							checked={selectedItems?.status ? true : false}
-							value={1}
-						/>
-					</div>
-					<div class="w-full md:w-1/3 px-3 mb-6 md:mb-0">
-						<label
-							class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-							for="recurring"
-						>
-							Recurring
-						</label>
-						<!-- class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" -->
-						<input
-							type="checkbox"
-							id="recurring"
-							name="recurring"
-							checked={selectedItems?.recurring ? true : false}
-							value={1}
-						/>
 					</div>
 				</div>
 				<div class="flex flex-wrap -mx-3 mb-6">

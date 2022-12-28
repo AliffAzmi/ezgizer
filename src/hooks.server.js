@@ -4,7 +4,8 @@ import Google from '@auth/core/providers/google'
 import {
 	GOOGLE_OAUTH_CLIENT_ID,
 	GOOGLE_OAUTH_CLIENT_SECRET,
-	NEXTAUTH_SECRET
+	NEXTAUTH_SECRET,
+	APP_URL
 } from '$env/static/private'
 
 const auth = SvelteKitAuth({
@@ -13,7 +14,23 @@ const auth = SvelteKitAuth({
 	],
 	secret: NEXTAUTH_SECRET,
 	session: { jwt: true },
+	pages: {
+		signIn: '/',
+		error: '/'
+	},
 	callbacks: {
+		signIn: async ({ user, profile }) => {
+			try {
+				const userData = await fetch(`${APP_URL}/api/users?email=${profile.email}`, {
+					method: 'GET'
+				})
+				const userResponse = await userData.json()
+				return userResponse.users
+			} catch (error) {
+				console.log(error)
+				return false
+			}
+		},
 		redirect: async (url, _) => {
 			return Promise.resolve('/dashboard')
 		}

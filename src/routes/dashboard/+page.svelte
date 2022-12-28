@@ -9,7 +9,7 @@
 	let spentFigure = 0;
 	let mostUtilitesList = [];
 	let mostCategoriesList = [];
-	let performanceFigure = '0%';
+	$: performanceFigure = 0;
 	onMount(async () => {
 		const { id } = await getUsers();
 		const { total, pending, spent, performance, most_utilities, most_categories } =
@@ -24,7 +24,7 @@
 		spentFigure = new Intl.NumberFormat('ta-MY', { style: 'currency', currency: 'MYR' }).format(
 			spent
 		);
-		performanceFigure = performance;
+		performanceFigure = Math.round(performance);
 		mostUtilitesList = most_utilities;
 		mostCategoriesList = most_categories;
 	});
@@ -143,7 +143,7 @@
 							<div class="flex flex-wrap">
 								<div class="relative w-full pr-4 max-w-full flex-grow flex-1">
 									<h5 class="text-gray-400 uppercase font-bold text-xs">PERFORMANCE</h5>
-									<span class="font-semibold text-xl text-gray-700">{performanceFigure || 0}%</span>
+									<span class="font-semibold text-xl text-gray-700">{performanceFigure}%</span>
 								</div>
 								<div class="relative w-auto pl-4 flex-initial">
 									<div
@@ -157,8 +157,9 @@
 							<div class="bg-gray-200 relative h-4 w-full rounded-2xl text-sm mt-4">
 								<div
 									class={`bg-green-400 absolute top-0 left-0 flex h-full ${
-										performanceFigure ? `w-[${Math.round(performanceFigure)}%]` : 'w-[0%]'
-									}  items-center justify-center rounded-2xl text-xs font-semibold text-black`}
+										performanceFigure ? `w-[${performanceFigure}%]` : 'w-[0%]'
+									} items-center justify-center rounded-2xl text-xs font-semibold text-white`}
+									style={`width: ${performanceFigure}%;`}
 								/>
 							</div>
 						</div>
@@ -264,7 +265,7 @@
 							<tr>
 								<th
 									class="px-6 bg-gray-50 text-gray-500 align-middle border border-solid border-gray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
-									>Category</th
+									>Name</th
 								>
 								<th
 									class="px-6 bg-gray-50 text-gray-500 align-middle border border-solid border-gray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"

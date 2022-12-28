@@ -3,6 +3,32 @@
 	import { page } from '$app/stores';
 
 	import Icon from '@iconify/svelte';
+	import { onMount } from 'svelte';
+
+	const errors = {
+		AccessDenied: 'You do not have permission to sign in.',
+		Signin: 'Try signing with a different account.',
+		OAuthSignin: 'Try signing with a different account.',
+		OAuthCallback: 'Try signing with a different account.',
+		OAuthCreateAccount: 'Try signing with a different account.',
+		EmailCreateAccount: 'Try signing with a different account.',
+		Callback: 'Try signing with a different account.',
+		OAuthAccountNotLinked:
+			'To confirm your identity, sign in with the same account you used originally.',
+		EmailSignin: 'Check your email address.',
+		CredentialsSignin: 'Sign in failed. Check the details you provided are correct.',
+		default: 'Unable to sign in.'
+	};
+
+	const errorType = $page.url.searchParams.get('error');
+	let errorMessage;
+
+	onMount(() => {
+		if (errorType) {
+			errorMessage = errors[errorType];
+		}
+	});
+	console.log(errorMessage);
 </script>
 
 <svelte:head>
@@ -45,6 +71,11 @@
 							</div>
 							<h1 class="px-4 py-3 w-5/6 text-center text-gray-600 font-bold">Google</h1>
 						</button>
+					{/if}
+				</div>
+				<div class=" flex items-center justify-center mt-4">
+					{#if errorMessage}
+						<p class=" text-red-500 text-xs">{errorMessage}</p>
 					{/if}
 				</div>
 				<hr class="mt-6 border-b-1 border-gray-300" />

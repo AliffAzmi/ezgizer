@@ -7,8 +7,12 @@ export async function GET ({ url, params }) {
 	try {
 		const user_id = url.searchParams.get('user_id') || '1a012aadd'
 		const month_year = url.searchParams.get('month_year') || '11-22'
+		const { status } = JSON.parse(url.searchParams.get('queries')) || {}
 		try {
 			const res = await utilities.findOne({ user_id, month_year })
+			if (status || status === 0) {
+				res.items = res.items.filter(item => item.status === status)
+			}
 			return new Response(JSON.stringify(res), {
 				status: 200
 			})
