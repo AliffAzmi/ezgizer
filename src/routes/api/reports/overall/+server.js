@@ -1,4 +1,5 @@
 import client from '$lib/db'
+import { getDiffPercentage } from '$lib/utils'
 const utilities = client.collection('utilities')
 
 export async function GET ({ url, params }) {
@@ -64,7 +65,7 @@ export async function GET ({ url, params }) {
 				// 	{}
 				// )
 
-				let performance = '20.5%'
+				let performance = getDiffPercentage(spent, total).toFixed(2)
 				return {
 					total,
 					pending,

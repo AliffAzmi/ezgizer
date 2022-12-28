@@ -29,6 +29,11 @@
 		mostCategoriesList = most_categories;
 	});
 
+	const getCategoryName = async (val) => {
+		const res = await fetch(`/api/category?value=${val}`, { method: 'GET' });
+		return res.json();
+	};
+
 	const getOverallReports = async (id) => {
 		const response = await fetch('/api/reports/overall?user_id=1a012aadd&period=12-2022', {
 			method: 'GET'
@@ -138,7 +143,7 @@
 							<div class="flex flex-wrap">
 								<div class="relative w-full pr-4 max-w-full flex-grow flex-1">
 									<h5 class="text-gray-400 uppercase font-bold text-xs">PERFORMANCE</h5>
-									<span class="font-semibold text-xl text-gray-700">{performanceFigure}</span>
+									<span class="font-semibold text-xl text-gray-700">{performanceFigure || 0}%</span>
 								</div>
 								<div class="relative w-auto pl-4 flex-initial">
 									<div
@@ -148,10 +153,14 @@
 									</div>
 								</div>
 							</div>
-							<p class="text-sm text-gray-400 mt-4">
-								<span class="mr-2 text-emerald-500"><i class="fas fa-arrow-up" /> 12%</span>
-								<span class="whitespace-nowrap">Since last month</span>
-							</p>
+
+							<div class="bg-gray-200 relative h-4 w-full rounded-2xl text-sm mt-4">
+								<div
+									class={`bg-green-400 absolute top-0 left-0 flex h-full ${
+										performanceFigure ? `w-[${Math.round(performanceFigure)}%]` : 'w-[0%]'
+									}  items-center justify-center rounded-2xl text-xs font-semibold text-black`}
+								/>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -167,7 +176,7 @@
 			>
 				<div class="rounded-t mb-0 px-4 py-3 border-0">
 					<div class="flex flex-wrap items-center">
-						<div class="relative w-full px-4 max-w-full flex-grow flex-1">
+						<div class="relative w-full px-2 max-w-full flex-grow flex-1">
 							<h3 class="font-semibold text-base text-gray-700">Utilities</h3>
 						</div>
 						<div class="relative w-full px-4 max-w-full flex-grow flex-1 text-right">
@@ -189,6 +198,10 @@
 								</th>
 								<th
 									class="px-6 bg-gray-50 text-gray-500 align-middle border border-solid border-gray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
+									>Category</th
+								>
+								<th
+									class="px-6 bg-gray-50 text-gray-500 align-middle border border-solid border-gray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
 									>Price</th
 								>
 							</tr>
@@ -204,12 +217,18 @@
 									<td
 										class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
 									>
+										{#await getCategoryName(utility.category)}
+											<Icon class=" w-4 h-4" icon="eos-icons:loading" />
+										{:then { category }}
+											{category.name}
+										{/await}
+									</td>
+									<td
+										class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
+									>
 										{utility.price}
 									</td>
-									<!-- <td
-										class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-										>340</td
-									>
+									<!--
 									<td
 										class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
 										><i class="fas fa-arrow-up text-emerald-500 mr-4" />
@@ -228,7 +247,7 @@
 			>
 				<div class="rounded-t mb-0 px-4 py-3 border-0">
 					<div class="flex flex-wrap items-center">
-						<div class="relative w-full px-4 max-w-full flex-grow flex-1">
+						<div class="relative w-full px-2 max-w-full flex-grow flex-1">
 							<h3 class="font-semibold text-base text-gray-700">Categories</h3>
 						</div>
 						<div class="relative w-full px-4 max-w-full flex-grow flex-1 text-right">
@@ -262,8 +281,13 @@
 								<tr>
 									<th
 										class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left"
-										>{category.name}</th
 									>
+										{#await getCategoryName(category.name)}
+											<Icon class=" w-4 h-4" icon="eos-icons:loading" />
+										{:then { category }}
+											{category.name}
+										{/await}
+									</th>
 									<td
 										class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
 										>{category.price}</td

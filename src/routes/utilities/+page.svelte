@@ -20,6 +20,7 @@
 	let upsertLabel = 'Create';
 	let selecteditem = {};
 	let showYear = false;
+	let container;
 
 	onMount(async () => {
 		await getUtilities();
@@ -116,6 +117,17 @@
 			$items.find((itm) => itm.id === item.id).status = e.target.checked ? 1 : 0;
 		}
 	};
+
+	const getCategoryName = async (val) => {
+		const res = await fetch(`/api/category?value=${val}`, { method: 'GET' });
+		return res.json();
+	};
+
+	const showDropdownOptions = () => {
+		document.getElementById('options').classList.toggle('hidden');
+		document.getElementById('arrow-up').classList.toggle('hidden');
+		document.getElementById('arrow-down').classList.toggle('hidden');
+	};
 </script>
 
 <svelte:head>
@@ -124,11 +136,96 @@
 
 <Top title={'My Utilities'} />
 
+<svelte:window
+	on:click={(e) => {
+		if (container.contains(e.target) === false) showYear = false;
+	}}
+/>
+
 <div class="px-4 md:px-10 mx-auto w-full">
 	<Toaster />
-	<h1 class=" text-2xl">{current_month_name} - {current_year}</h1>
+	<div class=" flex">
+		<h1 class=" text-2xl">
+			{current_month_name} -
+		</h1>
+		<div class="ml-2 relative">
+			<button
+				type="button"
+				class="inline-flex justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 "
+				on:click={() => (showYear = !showYear)}
+				bind:this={container}
+			>
+				{current_year}
+
+				<Icon class=" -mr-1 ml-2 h-5 w-5 " icon="mdi:chevron-down" />
+			</button>
+			{#if showYear}
+				<div
+					in:scale={{ duration: 100, start: 0.95 }}
+					out:scale={{ duration: 75, start: 0.95 }}
+					class="absolute z-20 mt-2 w-24 rounded-md overflow-auto h-32 bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+				>
+					{#each years as year}
+						<div
+							class={`py-1 cursor-pointer ${current_year === year ? ' bg-gray-300' : ''}`}
+							on:click={() => {
+								handleSelectYear(year);
+								showYear = !showYear;
+							}}
+							role="none"
+						>
+							<span class={`text-gray-700 block px-4 py-2 text-sm`}>{year}</span>
+						</div>
+					{/each}
+				</div>
+			{/if}
+		</div>
+		<!-- {current_year} -->
+	</div>
 
 	<Table {loading} items={$items}>
+		<div slot="left_actions" class=" flex items-center gap-1">
+			<!-- <form class="md:flex hidden flex-row flex-wrap items-center lg:ml-auto mr-3"> -->
+			<!-- <button
+				type="button"
+				class="inline-flex justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 "
+				> -->
+			<!-- Status<Icon class=" -mr-1 ml-2 h-5 w-5 " icon="mdi:chevron-down" /> -->
+
+			<div class="flex flex-row justify-center">
+				<div class="flex-none text-sm">
+					<button
+						on:click={() => showDropdownOptions()}
+						class="flex flex-row justify-between w-32 px-2 py-2 text-gray-700 bg-white rounded-md border border-gray-300"
+					>
+						<span class="select-none">Status: All</span>
+
+						<Icon id="arrow-down" class="hidden w-5 h-5 stroke-current" icon="mdi:chevron-down" />
+						<Icon id="arrow-up" class="w-5 h-5 stroke-current" icon="mdi:chevron-up" />
+					</button>
+					<div id="options" class="hidden absolute w-32 py-2 mt-2 bg-white rounded-lg shadow-xl">
+						<button class="block px-4 py-2 text-gray-800">Completed</button>
+						<button class="block px-4 py-2 text-gray-800">Pending</button>
+					</div>
+				</div>
+			</div>
+			<!-- </button> -->
+			<div class="relative flex w-full flex-wrap items-stretch">
+				<span
+					class="z-10 h-full leading-snug font-normal text-center text-gray-300 absolute bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-2"
+				>
+					<!-- <i class="fas fa-search" /> -->
+					<Icon class=" w-5 h-5" icon="ic:round-search" />
+				</span>
+				<input
+					type="text"
+					placeholder="Search here..."
+					class="border-0 px-3 py-2 placeholder-gray-300 text-gray-600 relative bg-white rounded text-sm shadow outline-none focus:outline-none focus:ring w-full pl-10"
+				/>
+			</div>
+			<!-- </form> -->
+		</div>
+
 		<div slot="left_actions_2">
 			<div class=" flex items-center gap-2">
 				{#each months as month}
@@ -147,39 +244,6 @@
 				{/each}
 			</div>
 		</div>
-		<div slot="right_actions_2" class="relative inline-block text-left">
-			<div>
-				<button
-					type="button"
-					class="inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 "
-					on:click={() => (showYear = !showYear)}
-				>
-					{current_year}
-
-					<Icon class=" -mr-1 ml-2 h-5 w-5 " icon="mdi:chevron-down" />
-				</button>
-			</div>
-			{#if showYear}
-				<div
-					in:scale={{ duration: 100, start: 0.95 }}
-					out:scale={{ duration: 75, start: 0.95 }}
-					class="absolute right-0 z-10 mt-2 w-24 rounded-md overflow-auto h-32 bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-				>
-					{#each years as year}
-						<div
-							class={`py-1 cursor-pointer ${current_year === year ? ' bg-gray-300' : ''}`}
-							on:click={() => {
-								handleSelectYear(year);
-								showYear = !showYear;
-							}}
-							role="none"
-						>
-							<span class={`text-gray-700 block px-4 py-2 text-sm`}>{year}</span>
-						</div>
-					{/each}
-				</div>
-			{/if}
-		</div>
 
 		<div slot="right_actions">
 			<button
@@ -194,8 +258,8 @@
 			</button>
 		</div>
 
-		<table slot="table" class="min-w-full divide-y divide-gray-200">
-			<thead class="bg-gray-50">
+		<table slot="table" class="min-w-full divide-y divide-gray-200 bg-white">
+			<thead>
 				<tr>
 					<th scope="col" class="py-3 pl-4">
 						<!-- <div class="flex items-center h-5">
@@ -229,8 +293,12 @@
 							{i + 1}
 						</td>
 						<td class="px-6 py-4 text-sm text-gray-800 whitespace-nowrap"> {item.name} </td>
-						<td class="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">
-							{item.category}
+						<td class="px-6 py-4 text-sm text-gray-800 whitespace-nowrap w-[20%]">
+							{#await getCategoryName(item.category)}
+								<Icon class=" w-4 h-4" icon="eos-icons:loading" />
+							{:then { category }}
+								{category.name}
+							{/await}
 						</td>
 						<td class="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">
 							RM {item.price}

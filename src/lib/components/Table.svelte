@@ -6,8 +6,8 @@
 </script>
 
 <div class="flex flex-col">
-	<div class="overflow-x-auto">
-		<div class="flex justify-between py-3 pl-2">
+	<div>
+		<div class="flex justify-between py-3 pl-2 overflow-x-auto">
 			<slot name="left_actions_2" />
 			<slot name="right_actions_2" />
 		</div>

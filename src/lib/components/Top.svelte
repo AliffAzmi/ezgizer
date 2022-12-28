@@ -13,20 +13,8 @@
 	<div
 		class="w-full mx-autp items-center flex justify-between md:flex-nowrap flex-wrap md:px-10 px-4"
 	>
-		<a class="text-sm uppercase hidden lg:inline-block font-semibold" href="#pablo">{title}</a>
-		<form class="md:flex hidden flex-row flex-wrap items-center lg:ml-auto mr-3">
-			<div class="relative flex w-full flex-wrap items-stretch">
-				<span
-					class="z-10 h-full leading-snug font-normal text-center text-gray-300 absolute bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-3"
-					><i class="fas fa-search" /></span
-				>
-				<input
-					type="text"
-					placeholder="Search here..."
-					class="border-0 px-3 py-3 placeholder-gray-300 text-gray-600 relative bg-white rounded text-sm shadow outline-none focus:outline-none focus:ring w-full pl-10"
-				/>
-			</div>
-		</form>
+		<div class="text-sm uppercase hidden lg:inline-block font-semibold">{title}</div>
+		
 		<ul class="flex-col md:flex-row list-none items-center hidden md:flex">
 			<div class=" relative">
 				<a class="text-gray-500 block" href="#pablo">

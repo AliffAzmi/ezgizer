@@ -210,7 +210,7 @@
 	<Toaster />
 
 	<Table {items}>
-		<div slot="left_actions">
+		<div slot="left_actions" class=" flex items-center gap-1">
 			<button
 				class={`relative z-0 inline-flex text-sm rounded-md shadow-sm focus:ring-accent-500 focus:border-accent-500 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 cursor-pointer`}
 				on:click={async () =>
@@ -244,6 +244,29 @@
 					<div class="hidden sm:block">Duplicate</div>
 				</span>
 			</button>
+
+			<button
+				class={`relative z-0 inline-flex text-sm rounded-md shadow-sm focus:ring-accent-500 focus:border-accent-500 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1`}
+			>
+				<span
+					class=" md:hidden relative inline-flex items-center px-3 py-3 space-x-2 text-sm font-medium text-gray-600 bg-white border border-gray-300 rounded-md sm:py-2"
+				>
+					<Icon class="w-4 h-4" icon="ic:round-search" />
+				</span>
+
+				<div class="hidden md:block">
+					<span
+						class="z-10 h-full leading-snug font-normal text-center text-gray-300 absolute bg-transparent rounded text-base items-center justify-center w-8 pl-3 py-3"
+					>
+						<Icon class=" w-4 h-4" icon="ic:round-search" />
+					</span>
+					<input
+						type="text"
+						placeholder="Search here..."
+						class="border-0 px-2 py-2 placeholder-gray-300 text-gray-600 relative bg-white rounded text-sm shadow outline-none focus:outline-none focus:ring w-full pl-10"
+					/>
+				</div>
+			</button>
 		</div>
 
 		<div slot="right_actions">
@@ -259,8 +282,8 @@
 			</button>
 		</div>
 
-		<table slot="table" class="min-w-full divide-y divide-gray-200">
-			<thead class="bg-gray-50">
+		<table slot="table" class="min-w-full divide-y divide-gray-200 bg-white">
+			<thead>
 				<tr>
 					<th scope="col" class="py-3 pl-4">
 						<div class="flex items-center h-5">

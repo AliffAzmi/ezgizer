@@ -25,8 +25,8 @@
 			</button>
 		</div>
 
-		<table slot="table" class="min-w-full divide-y divide-gray-200">
-			<thead class="bg-gray-50">
+		<table slot="table" class="min-w-full divide-y divide-gray-200 bg-white">
+			<thead>
 				<tr>
 					<th scope="col" class="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase " />
 					<th scope="col" class="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase ">
