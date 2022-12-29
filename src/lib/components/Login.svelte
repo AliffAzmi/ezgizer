@@ -28,7 +28,6 @@
 			errorMessage = errors[errorType];
 		}
 	});
-	console.log(errorMessage);
 </script>
 
 <svelte:head>
