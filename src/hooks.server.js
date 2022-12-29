@@ -14,6 +14,7 @@ const auth = SvelteKitAuth({
 	],
 	secret: NEXTAUTH_SECRET,
 	session: { jwt: true },
+	trustHost: true,
 	pages: {
 		signIn: '/',
 		error: '/'
