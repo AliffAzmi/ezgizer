@@ -81,7 +81,7 @@
 		if (items) {
 			newItems = await Promise.all(
 				items.map(async (list) => {
-					const response = await fetch(`/api/category?value=${list.category}`, {
+					const response = await fetch(`/api/categories?value=${list.category}`, {
 						method: 'GET'
 					});
 					const payload = await response.json();

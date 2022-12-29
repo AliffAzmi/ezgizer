@@ -15,6 +15,8 @@ export async function DELETE ({ url, params }) {
 			status: 200
 		})
 	} catch (error) {
-		return error
+		return new Response(JSON.stringify({ message: error.message }), {
+			status: 500
+		})
 	}
 }

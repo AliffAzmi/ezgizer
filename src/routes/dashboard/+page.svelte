@@ -30,7 +30,7 @@
 	});
 
 	const getCategoryName = async (val) => {
-		const res = await fetch(`/api/category?value=${val}`, { method: 'GET' });
+		const res = await fetch(`/api/categories?value=${val}`, { method: 'GET' });
 		return res.json();
 	};
 
