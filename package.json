@@ -15,7 +15,6 @@
 		"@iconify/svelte": "^3.0.1",
 		"@sveltejs/adapter-auto": "next",
 		"@sveltejs/adapter-node": "^1.0.0-next.106",
-		"@sveltejs/kit": "next",
 		"autoprefixer": "^10.4.13",
 		"flatpickr": "^4.6.13",
 		"md5": "^2.3.0",
@@ -32,6 +31,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@sveltejs/kit": "^1.0.1",
 		"next-auth": "^4.18.6"
 	}
 }
