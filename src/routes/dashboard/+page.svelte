@@ -1,32 +1,93 @@
 <script>
 	import { onMount } from 'svelte';
 	// import { page } from '$app/stores';
+	import Flatpickr from 'svelte-flatpickr';
+	import monthSelectPlugin from 'flatpickr/dist/plugins/monthSelect';
+
 	import Top from '$lib/components/Top.svelte';
 	import Icon from '@iconify/svelte';
+
+	import 'flatpickr/dist/flatpickr.css';
+	import 'flatpickr/dist/plugins/monthSelect/style.css';
 
 	let totalFigure = 0;
 	let pendingFigure = 0;
 	let spentFigure = 0;
 	let mostUtilitesList = [];
 	let mostCategoriesList = [];
+	let current_month = `${
+		new Date().toLocaleString('en-US', { month: '2-digit', timeZone: 'Asia/Singapore' }) || '12'
+	}`;
+	let current_year = new Date().getFullYear() || 2022;
+	$: periodKey = `${current_month}-${current_year}`;
+
+	const options = {
+		disableMobile: true,
+		animate: true,
+		altFormat: 'F Y',
+		altInput: true,
+		plugins: [
+			new monthSelectPlugin({
+				shorthand: true,
+				dateFormat: 'm-Y',
+				altFormat: 'F Y'
+			})
+		],
+		onChange(selectedDates, dateStr) {
+			periodKey = dateStr;
+			init();
+		}
+	};
+
 	$: performanceFigure = 0;
-	onMount(async () => {
+	$: topAnalytics = [
+		{
+			name: 'total',
+			figure: totalFigure,
+			bgColor: 'bg-red-500',
+			icon: 'material-symbols:attach-money'
+		},
+		{
+			name: 'pending',
+			figure: pendingFigure,
+			bgColor: 'bg-orange-500',
+			icon: 'material-symbols:pending-actions-rounded'
+		},
+		{
+			name: 'spent',
+			figure: spentFigure,
+			bgColor: 'bg-pink-500',
+			icon: 'ic:twotone-download-done'
+		},
+		{
+			name: 'performance',
+			figure: performanceFigure,
+			bgColor: 'bg-emerald-500',
+			icon: 'mdi:performance'
+		}
+	];
+
+	const init = async () => {
 		const { id } = await getUsers();
 		const { total, pending, spent, performance, most_utilities, most_categories } =
 			await getOverallReports(id);
 
 		totalFigure = new Intl.NumberFormat('ta-MY', { style: 'currency', currency: 'MYR' }).format(
-			total
+			total || 0
 		);
 		pendingFigure = new Intl.NumberFormat('ta-MY', { style: 'currency', currency: 'MYR' }).format(
-			pending
+			pending || 0
 		);
 		spentFigure = new Intl.NumberFormat('ta-MY', { style: 'currency', currency: 'MYR' }).format(
-			spent
+			spent || 0
 		);
-		performanceFigure = Math.round(performance);
-		mostUtilitesList = most_utilities;
-		mostCategoriesList = most_categories;
+		performanceFigure = Math.round(performance || 0) + '%';
+
+		mostUtilitesList = most_utilities || [];
+		mostCategoriesList = most_categories || [];
+	};
+	onMount(async () => {
+		await init();
 	});
 
 	const getCategoryName = async (val) => {
@@ -35,7 +96,7 @@
 	};
 
 	const getOverallReports = async (id) => {
-		const response = await fetch('/api/reports/overall?user_id=1a012aadd&period=12-2022', {
+		const response = await fetch(`/api/reports/overall?user_id=1a012aadd&period=${periodKey}`, {
 			method: 'GET'
 		});
 		return await response.json();
@@ -57,115 +118,56 @@
 <Top title={'Dashboard'} />
 
 <div class="relative pb-12 pt-12">
-	<div class="px-4 md:px-10 mx-auto w-full">
-		<div>
-			<div class="flex flex-wrap">
-				<div class="w-full lg:w-6/12 xl:w-3/12 px-4">
-					<div
-						class="relative flex flex-col min-w-0 break-words bg-white rounded mb-6 xl:mb-0 shadow-lg"
-					>
-						<div class="flex-auto p-4">
-							<div class="flex flex-wrap">
-								<div class="relative w-full pr-4 max-w-full flex-grow flex-1">
-									<h5 class="text-gray-400 uppercase font-bold text-xs">TOTAL</h5>
-									<span class="font-semibold text-xl text-gray-700">{totalFigure}</span>
-								</div>
-								<div class="relative w-auto pl-4 flex-initial">
-									<div
-										class="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 shadow-lg rounded-full bg-red-500"
-									>
-										<Icon class=" w-6 h-6" icon="material-symbols:attach-money" />
-									</div>
-								</div>
-							</div>
-							<p class="text-sm text-gray-400 mt-4">
-								<span class="mr-2 text-emerald-500"><i class="fas fa-arrow-up" /> 3.48%</span>
-								<span class="whitespace-nowrap">Higher prev month</span>
-							</p>
+	<div class="md:px-10 mx-auto w-full">
+		<div class=" mb-6 px-4 flex flex-row-reverse items-center gap-4">
+			<Flatpickr {options} value={new Date()} class=" p-4" element="#my-picker">
+				<div class="flatpickr" id="my-picker">
+					<div class="relative mt-2 rounded-md shadow-sm">
+						<!-- <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+							<Icon class="text-gray-500 sm:text-sm" icon="fluent-mdl2:calendar-year" />
+						</div> -->
+						<input
+							type="text"
+							class="block w-full rounded-md border-0 py-1.5 pl-2 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+							data-input
+						/>
+						<div class="absolute inset-y-0 right-0 mr-2 flex items-center">
+							<!-- <Icon icon="mingcute:down-fill" /> -->
+							<Icon class="text-gray-500 sm:text-sm" icon="fluent-mdl2:calendar-year" />
 						</div>
 					</div>
 				</div>
-				<div class="w-full lg:w-6/12 xl:w-3/12 px-4">
-					<div
-						class="relative flex flex-col min-w-0 break-words bg-white rounded mb-6 xl:mb-0 shadow-lg"
-					>
-						<div class="flex-auto p-4">
-							<div class="flex flex-wrap">
-								<div class="relative w-full pr-4 max-w-full flex-grow flex-1">
-									<h5 class="text-gray-400 uppercase font-bold text-xs">PENDING</h5>
-									<span class="font-semibold text-xl text-gray-700">{pendingFigure}</span>
-								</div>
-								<div class="relative w-auto pl-4 flex-initial">
-									<div
-										class="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 shadow-lg rounded-full bg-orange-500"
-									>
-										<Icon class=" w-6 h-6" icon="material-symbols:pending-actions-rounded" />
-									</div>
-								</div>
-							</div>
-							<p class="text-sm text-gray-400 mt-4">
-								<span class="mr-2 text-red-500"> 3.48%</span>
-								<span class="whitespace-nowrap">Since last week</span>
-							</p>
-						</div>
-					</div>
-				</div>
-				<div class="w-full lg:w-6/12 xl:w-3/12 px-4">
-					<div
-						class="relative flex flex-col min-w-0 break-words bg-white rounded mb-6 xl:mb-0 shadow-lg"
-					>
-						<div class="flex-auto p-4">
-							<div class="flex flex-wrap">
-								<div class="relative w-full pr-4 max-w-full flex-grow flex-1">
-									<h5 class="text-gray-400 uppercase font-bold text-xs">SPENT</h5>
-									<span class="font-semibold text-xl text-gray-700">{spentFigure}</span>
-								</div>
-								<div class="relative w-auto pl-4 flex-initial">
-									<div
-										class="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 shadow-lg rounded-full bg-pink-500"
-									>
-										<Icon class=" w-6 h-6" icon="ic:twotone-download-done" />
-									</div>
-								</div>
-							</div>
-							<p class="text-sm text-gray-400 mt-4">
-								<span class="mr-2 text-orange-500"><i class="fas fa-arrow-down" /> 1.10%</span>
-								<span class="whitespace-nowrap">Since yesterday</span>
-							</p>
-						</div>
-					</div>
-				</div>
-				<div class="w-full lg:w-6/12 xl:w-3/12 px-4">
-					<div
-						class="relative flex flex-col min-w-0 break-words bg-white rounded mb-6 xl:mb-0 shadow-lg"
-					>
-						<div class="flex-auto p-4">
-							<div class="flex flex-wrap">
-								<div class="relative w-full pr-4 max-w-full flex-grow flex-1">
-									<h5 class="text-gray-400 uppercase font-bold text-xs">PERFORMANCE</h5>
-									<span class="font-semibold text-xl text-gray-700">{performanceFigure}%</span>
-								</div>
-								<div class="relative w-auto pl-4 flex-initial">
-									<div
-										class="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 shadow-lg rounded-full bg-emerald-500"
-									>
-										<Icon class=" w-6 h-6" icon="mdi:performance" />
-									</div>
-								</div>
-							</div>
+			</Flatpickr>
+		</div>
 
-							<div class="bg-gray-200 relative h-4 w-full rounded-2xl text-sm mt-4">
-								<div
-									class={`bg-green-400 absolute top-0 left-0 flex h-full ${
-										performanceFigure ? `w-[${performanceFigure}%]` : 'w-[0%]'
-									} items-center justify-center rounded-2xl text-xs font-semibold text-white`}
-									style={`width: ${performanceFigure}%;`}
-								/>
+		<div class="flex flex-wrap">
+			{#each topAnalytics as topAnalytic}
+				<div class="w-full lg:w-6/12 xl:w-3/12 px-4">
+					<div
+						class="relative flex flex-col min-w-0 break-words bg-white rounded mb-6 xl:mb-0 shadow-lg"
+					>
+						<div class="flex-auto p-4">
+							<div class="flex flex-wrap">
+								<div class="relative w-full pr-4 max-w-full flex-grow flex-1">
+									<h5 class="text-gray-400 uppercase font-bold text-xs">{topAnalytic.name}</h5>
+									<span class="font-semibold text-xl text-gray-700">{topAnalytic.figure}</span>
+								</div>
+								<div class="relative w-auto pl-4 flex-initial">
+									<div
+										class="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 shadow-lg rounded-full {topAnalytic.bgColor}"
+									>
+										<Icon class=" w-6 h-6" icon={topAnalytic.icon} />
+									</div>
+								</div>
 							</div>
+							<!-- <p class="text-sm text-gray-400 mt-4">
+									<span class="mr-2 text-emerald-500"><i class="fas fa-arrow-up" /> 3.48%</span>
+									<span class="whitespace-nowrap">Higher prev month</span>
+								</p> -->
 						</div>
 					</div>
 				</div>
-			</div>
+			{/each}
 		</div>
 	</div>
 </div>

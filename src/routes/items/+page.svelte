@@ -386,7 +386,7 @@
 			<form on:submit|preventDefault={handleSubmit}>
 				<div class=" pb-4">
 					<h2 class=" text-sm text-gray-600">
-						Note: This action lead to replace all the items in your selection period.
+						🚨 Note: This action lead to replace all the items in your selection period.
 					</h2>
 				</div>
 				<div class="flex items-center gap-4">

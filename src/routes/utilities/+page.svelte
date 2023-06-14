@@ -7,21 +7,19 @@
 	import months from '$lib/data/months.js';
 	import { years } from '$lib/data/years';
 	// import dataitems from '$lib/data/items.js';
+	import { page } from '$app/stores';
+	import { goto } from '$app/navigation';
 	import dataCategories from '$lib/data/categories.js';
 	import Modal from '$lib/components/Modal.svelte';
 	import Table from '$lib/components/Table.svelte';
 	import Top from '$lib/components/Top.svelte';
 
-	$: current_month_name =
-		months.find(
-			(m) =>
-				m.value ===
-				new Date().toLocaleString('en-US', { month: '2-digit', timeZone: 'Asia/Singapore' })
-		).name || 'January';
-	$: current_month = `${
-		new Date().toLocaleString('en-US', { month: '2-digit', timeZone: 'Asia/Singapore' }) || '12'
-	}`;
-	$: current_year = new Date().getFullYear() || 2022;
+	const url = $page.url;
+	const period = url.searchParams.get('period');
+	$: current_month_name = 'January';
+	$: current_month = '12';
+	$: current_year = 2022;
+
 	let showItemModal = false;
 	let loading = true;
 	let upsertLabel = 'Create';
@@ -31,9 +29,26 @@
 	let currentStatus = 'All';
 	let queries = {};
 	$: sortValue = true;
+	$: total = 0;
 
 	onMount(async () => {
-		await getUtilities();
+		if (period) {
+			current_month = period.split('-')[0];
+			current_year = period.split('-')[1];
+		} else {
+			current_month_name =
+				months.find(
+					(m) =>
+						m.value ===
+						new Date().toLocaleString('en-US', { month: '2-digit', timeZone: 'Asia/Singapore' })
+				).name || 'January';
+			current_month = `${
+				new Date().toLocaleString('en-US', { month: '2-digit', timeZone: 'Asia/Singapore' }) || '12'
+			}`;
+			current_year = new Date().getFullYear() || 2022;
+		}
+
+		await getUtilities(period);
 		await handleGetMonthTranslation();
 	});
 
@@ -41,9 +56,13 @@
 		current_month_name = months.find((m) => m.value === current_month).name || '';
 	};
 
-	const getUtilities = async () => {
+	const getUtilities = async (period) => {
 		const user_id = '1a012aadd';
-		const month_year = `${current_month}-${current_year}`;
+		const month_year = period ? period : `${current_month}-${current_year}`;
+
+		url.searchParams.set('period', month_year);
+		goto(`?${url.searchParams.toString()}`);
+
 		const response = await fetch(
 			`/api/utilities?user_id=${user_id}&month_year=${month_year}&queries=${JSON.stringify(
 				queries
@@ -56,6 +75,7 @@
 		const payload = await response.json();
 		if (payload?.items) {
 			$items = payload.items;
+			total = payload.total;
 		} else {
 			$items = [];
 		}
@@ -221,11 +241,6 @@
 	<Table {loading} items={$items}>
 		<div slot="left_actions" class=" flex items-center gap-1">
 			<!-- <form class="md:flex hidden flex-row flex-wrap items-center lg:ml-auto mr-3"> -->
-			<!-- <button
-				type="button"
-				class="inline-flex justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 "
-				> -->
-			<!-- Status<Icon class=" -mr-1 ml-2 h-5 w-5 " icon="mdi:chevron-down" /> -->
 
 			<div class="flex flex-row justify-center">
 				<div class="flex-none text-sm">
@@ -254,7 +269,7 @@
 					</div>
 				</div>
 			</div>
-			<!-- </button> -->
+
 			<div class="relative flex w-full flex-wrap items-stretch">
 				<span
 					class=" md:hidden relative inline-flex items-center px-3 py-3 space-x-2 text-sm font-medium text-gray-600 bg-white border border-gray-300 rounded-md sm:py-2"
@@ -314,7 +329,7 @@
 		<table slot="table" class="min-w-full divide-y divide-gray-200 bg-white">
 			<thead>
 				<tr>
-					<th scope="col" class="py-3 pl-4">
+					<th scope="col" class="py-3 pl-4 hidden lg:block">
 						<!-- <div class="flex items-center h-5">
 							<input
 								id="checkbox-all"
@@ -327,7 +342,7 @@
 					<th scope="col" class="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase ">
 						Name
 					</th>
-					<th scope="col" class="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase ">
+					<th scope="col" class="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase hidden lg:block">
 						Category
 					</th>
 					<th scope="col" class="px-6 py-3 ">
@@ -351,11 +366,11 @@
 			<tbody class="divide-y divide-gray-200">
 				{#each $items as item, i}
 					<tr>
-						<td class="px-6 py-4 text-sm font-medium text-gray-800 whitespace-nowrap">
+						<td class="px-6 py-4 text-sm font-medium text-gray-800 whitespace-nowrap hidden lg:block">
 							{i + 1}
 						</td>
 						<td class="px-6 py-4 text-sm text-gray-800 whitespace-nowrap"> {item.name} </td>
-						<td class="px-6 py-4 text-sm text-gray-800 whitespace-nowrap w-[20%]">
+						<td class="px-6 py-4 text-sm text-gray-800 whitespace-nowrap w-[20%] hidden lg:block">
 							{#await getCategoryName(item.category)}
 								<Icon class=" w-4 h-4" icon="eos-icons:loading" />
 							{:then { category }}
@@ -389,6 +404,14 @@
 						</td>
 					</tr>
 				{/each}
+				<tr class=" border-0">
+					<td class="hidden lg:block" />
+					<td />
+					<td class="hidden lg:block" />
+					<td class=" px-6 py-4 text-sm text-gray-800 whitespace-nowrap font-bold">RM {total}</td>
+					<td />
+					<td />
+				</tr>
 			</tbody>
 		</table>
 

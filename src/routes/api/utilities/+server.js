@@ -13,6 +13,12 @@ export async function GET ({ url, params }) {
 			if (status || status === 0) {
 				res.items = res.items.filter(item => item.status === status)
 			}
+			if (res) {
+				res.total = res.items
+					.map(item => item.price)
+					.reduce((prev, next) => parseInt(prev) + parseInt(next))
+			}
+
 			return new Response(JSON.stringify(res), {
 				status: 200
 			})
