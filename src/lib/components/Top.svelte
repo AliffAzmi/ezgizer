@@ -2,6 +2,7 @@
 	import { signOut } from '@auth/sveltekit/client';
 	import Icon from '@iconify/svelte';
 	import { page } from '$app/stores';
+	import TopAction from './TopAction.svelte';
 
 	export let title;
 	let openUserDropDown = false;
@@ -13,7 +14,7 @@
 	<div
 		class="w-full mx-autp items-center flex justify-between md:flex-nowrap flex-wrap md:px-10 px-4"
 	>
-		<div class="text-sm uppercase hidden lg:inline-block font-semibold">{title}</div>
+		<div class=" text-2xl uppercase hidden lg:inline-block font-semibold">{title}</div>
 
 		<ul class="flex-col md:flex-row list-none items-center hidden md:flex">
 			<div class=" relative">
@@ -29,29 +30,7 @@
 						/>
 					</button>
 				</div>
-				{#if openUserDropDown}
-					<div
-						class="bg-white text-base z-50 float-left py-2 list-none text-left rounded shadow-lg min-w-48 absolute right-0"
-					>
-						<div class="flex items-center gap-2 py-2 px-4">
-							<Icon class=" w-5 h-6" icon="ep:setting" />
-							<a
-								href="#nothingness"
-								class="text-sm font-normal block w-full whitespace-nowrap bg-transparent text-gray-700"
-								>Settings</a
-							>
-						</div>
-						<div class="h-0 my-2 border border-solid border-gray-100" />
-
-						<div class="flex items-center gap-2 py-2 px-4">
-							<Icon class=" w-5 h-6" icon="mdi:sign-out" />
-							<button
-								class="text-sm font-normal block w-full whitespace-nowrap bg-transparent text-gray-700"
-								on:click={() => signOut()}>Logout</button
-							>
-						</div>
-					</div>
-				{/if}
+				<TopAction open={openUserDropDown} />
 			</div>
 		</ul>
 	</div>

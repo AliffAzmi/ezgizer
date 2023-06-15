@@ -3,6 +3,7 @@
 	import { page } from '$app/stores';
 	import routes from '$lib/routes';
 	import Icon from '@iconify/svelte';
+	import TopAction from './TopAction.svelte';
 
 	let openUserDropDown = false;
 	let collapseShow = 'hidden';
@@ -47,29 +48,7 @@
 						/>
 					</button>
 				</div>
-				{#if openUserDropDown}
-					<div
-						class="bg-white text-base z-50 float-left py-2 list-none text-left rounded shadow-lg min-w-48 absolute right-0"
-					>
-						<div class="flex items-center gap-2 py-2 px-4">
-							<Icon class=" w-5 h-6" icon="ep:setting" />
-							<a
-								href="#nothingness"
-								class="text-sm font-normal block w-full whitespace-nowrap bg-transparent text-gray-700"
-								>Settings</a
-							>
-						</div>
-						<div class="h-0 my-2 border border-solid border-gray-100" />
-
-						<div class="flex items-center gap-2 py-2 px-4">
-							<Icon class=" w-5 h-6" icon="mdi:sign-out" />
-							<button
-								class="text-sm font-normal block w-full whitespace-nowrap bg-transparent text-gray-700"
-								on:click={() => signOut()}>Logout</button
-							>
-						</div>
-					</div>
-				{/if}
+				<TopAction open={openUserDropDown} />
 			</li>
 		</ul>
 
@@ -111,7 +90,11 @@
 			<ul class="md:flex-col md:min-w-full flex flex-col list-none">
 				{#each routes as route}
 					<li class="items-center" class:active={$page.url.pathname.includes(route.href)}>
-						<a href={route.href} class="text-xs uppercase py-3 font-bold block ">
+						<a
+							href={route.href}
+							on:click={() => toggleCollapseShow('hidden')}
+							class="text-xs uppercase py-3 font-bold block "
+						>
 							<div class=" flex items-center">
 								<Icon class="mr-2 text-xl " icon={route.icon} />
 								{route.label}

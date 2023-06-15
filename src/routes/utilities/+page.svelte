@@ -184,6 +184,15 @@
 		document.getElementById('arrow-up').classList.toggle('hidden');
 		document.getElementById('arrow-down').classList.toggle('hidden');
 	};
+
+	const scrollOnActive = (node, active) => {
+		const update = (active) => {
+			if (active) node.scrollIntoView({ behavior: 'auto', inline: 'center', block: 'nearest' });
+		};
+		update(active);
+
+		return { update };
+	};
 </script>
 
 <svelte:head>
@@ -302,9 +311,10 @@
 						class={`relative z-0 inline-flex text-sm rounded-md shadow-sm focus:ring-accent-500 focus:border-accent-500 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1`}
 					>
 						<span
-							class={` ${
-								current_month === month.value && 'bg-gray-300'
-							}  relative inline-flex items-center px-3 py-3 space-x-2 text-sm font-medium text-gray-600 bg-white border border-gray-300 rounded-md sm:py-2`}
+							use:scrollOnActive={current_month === month.value}
+							class={`${
+								current_month === month.value ? 'bg-gray-300' : ''
+							} relative inline-flex items-center px-3 py-3 space-x-2 text-sm font-medium text-gray-600 bg-white border border-gray-300 rounded-md sm:py-2`}
 						>
 							<span value={month.value}>{month.name_abbr}</span>
 						</span>
@@ -342,7 +352,10 @@
 					<th scope="col" class="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase ">
 						Name
 					</th>
-					<th scope="col" class="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase hidden lg:block">
+					<th
+						scope="col"
+						class="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase hidden lg:block"
+					>
 						Category
 					</th>
 					<th scope="col" class="px-6 py-3 ">
@@ -366,7 +379,9 @@
 			<tbody class="divide-y divide-gray-200">
 				{#each $items as item, i}
 					<tr>
-						<td class="px-6 py-4 text-sm font-medium text-gray-800 whitespace-nowrap hidden lg:block">
+						<td
+							class="px-6 py-4 text-sm font-medium text-gray-800 whitespace-nowrap hidden lg:block"
+						>
 							{i + 1}
 						</td>
 						<td class="px-6 py-4 text-sm text-gray-800 whitespace-nowrap"> {item.name} </td>

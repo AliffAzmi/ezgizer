@@ -9,6 +9,7 @@
 
 	import 'flatpickr/dist/flatpickr.css';
 	import 'flatpickr/dist/plugins/monthSelect/style.css';
+	import PieChart from '../../lib/components/PieChart.svelte';
 
 	let totalFigure = 0;
 	let pendingFigure = 0;
@@ -123,16 +124,12 @@
 			<Flatpickr {options} value={new Date()} class=" p-4" element="#my-picker">
 				<div class="flatpickr" id="my-picker">
 					<div class="relative mt-2 rounded-md shadow-sm">
-						<!-- <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-							<Icon class="text-gray-500 sm:text-sm" icon="fluent-mdl2:calendar-year" />
-						</div> -->
 						<input
 							type="text"
 							class="block w-full rounded-md border-0 py-1.5 pl-2 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
 							data-input
 						/>
 						<div class="absolute inset-y-0 right-0 mr-2 flex items-center">
-							<!-- <Icon icon="mingcute:down-fill" /> -->
 							<Icon class="text-gray-500 sm:text-sm" icon="fluent-mdl2:calendar-year" />
 						</div>
 					</div>
@@ -148,11 +145,11 @@
 					>
 						<div class="flex-auto p-4">
 							<div class="flex flex-wrap">
-								<div class="relative w-full pr-4 max-w-full flex-grow flex-1">
+								<div class="relative w-full max-w-full flex-grow flex-1">
 									<h5 class="text-gray-400 uppercase font-bold text-xs">{topAnalytic.name}</h5>
 									<span class="font-semibold text-xl text-gray-700">{topAnalytic.figure}</span>
 								</div>
-								<div class="relative w-auto pl-4 flex-initial">
+								<div class="relative w-auto flex-initial">
 									<div
 										class="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 shadow-lg rounded-full {topAnalytic.bgColor}"
 									>
@@ -184,7 +181,7 @@
 						</div>
 						<div class="relative w-full px-4 max-w-full flex-grow flex-1 text-right">
 							<button
-								class="bg-indigo-500 text-white active:bg-indigo-600 text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+								class="bg-red-500 text-white active:bg-red-600 text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
 								type="button"
 							>
 								<a href="/utilities?period={periodKey}">See all</a>
@@ -209,11 +206,14 @@
 									class="px-6 bg-gray-50 text-gray-500 align-middle border border-solid border-gray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
 									>Price</th
 								>
+								<th
+									class="px-6 bg-gray-50 text-gray-500 align-middle border border-solid border-gray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
+								/>
 							</tr>
 						</thead>
 						<tbody>
 							{#each mostUtilitesList as utility}
-								<tr>
+								<tr class="border-white {utility?.status ? 'bg-green-100 border-t-2' : ''}">
 									<th
 										class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left"
 									>
@@ -233,12 +233,14 @@
 									>
 										{utility.price}
 									</td>
-									<!--
+
 									<td
 										class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
-										><i class="fas fa-arrow-up text-emerald-500 mr-4" />
-										46,53%</td
-									> -->
+									>
+										{#if utility?.status}
+											<Icon class=" w-4 h-4" icon="fluent-emoji-flat:check-mark-button" />
+										{/if}
+									</td>
 								</tr>
 							{/each}
 						</tbody>
@@ -246,6 +248,7 @@
 				</div>
 			</div>
 		</div>
+
 		<div class="w-full xl:w-4/12 px-4">
 			<div
 				class="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded"
@@ -257,13 +260,17 @@
 						</div>
 						<div class="relative w-full px-4 max-w-full flex-grow flex-1 text-right">
 							<button
-								class="bg-indigo-500 text-white active:bg-indigo-600 text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+								class="bg-red-500 text-white active:bg-red-600 text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
 								type="button"><a href="/categories">See all</a></button
 							>
 						</div>
 					</div>
 				</div>
+
 				<div class="block w-full overflow-x-auto">
+					<div class=" flex justify-center items-center w-full px-6">
+						<PieChart data={mostCategoriesList} />
+					</div>
 					<table class="items-center w-full bg-transparent border-collapse">
 						<thead class="thead-light">
 							<tr>
