@@ -9,8 +9,8 @@
 </script>
 
 <div
-	class={`bg-white text-base z-50 float-left py-2 list-none text-left rounded shadow-lg min-w-48 absolute right-0 transition-all duration-200 ease-out ${
-		open ? 'opacity-100 top-14' : 'opacity-0 top-12'
+	class={`bg-white text-base float-left py-2 list-none text-left rounded shadow-lg min-w-48 absolute right-0 transition-all duration-200 ease-out ${
+		open ? 'opacity-100 top-14 z-50' : 'opacity-0 top-12 z-0'
 	}`}
 >
 	<div class="py-2 px-4">
