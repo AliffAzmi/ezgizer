@@ -3,7 +3,9 @@
 	import { page } from '$app/stores';
 	import routes from '$lib/routes';
 	import Icon from '@iconify/svelte';
+
 	import TopAction from './TopAction.svelte';
+	import ThemeSwitch from '$lib/ThemeSwitch/index.svelte';
 
 	let openUserDropDown = false;
 	let collapseShow = 'hidden';
@@ -13,23 +15,23 @@
 </script>
 
 <nav
-	class="md:left-0 md:block md:fixed md:top-0 md:bottom-0 md:overflow-y-auto md:flex-row md:flex-nowrap md:overflow-hidden shadow-xl bg-white flex flex-wrap items-center justify-between relative md:w-64 z-10 py-4 px-6"
+	class="md:left-0 md:block md:fixed md:top-0 md:bottom-0 md:overflow-y-auto md:flex-row md:flex-nowrap md:overflow-hidden shadow-xl bg-white dark:bg-slate-800 dark:border-r dark:border-gray-600 flex flex-wrap items-center justify-between relative md:w-64 z-10 py-4 px-6"
 >
 	<div
 		class="md:flex-col md:items-stretch md:min-h-full md:flex-nowrap px-0 flex flex-wrap items-center justify-between w-full mx-auto"
 	>
 		<!-- Toggler -->
 		<button
-			class="cursor-pointer text-black opacity-50 md:hidden px-3 py-1 text-xl leading-none bg-transparent rounded border border-solid border-transparent"
+			class="cursor-pointer text-black dark:text-white opacity-50 md:hidden px-3 py-1 text-xl leading-none bg-transparent rounded border border-solid border-transparent"
 			type="button"
-			on:click={() => toggleCollapseShow('bg-white py-3 px-6')}
+			on:click={() => toggleCollapseShow('bg-white dark:bg-slate-800 py-3 px-6')}
 		>
 			<Icon class=" w-7 h-7" icon="uis:bars" />
 		</button>
 		<!-- Brand -->
 		<a
-			class="md:block text-left md:pb-2 text-gray-600 mr-0 inline-block whitespace-nowrap text-sm uppercase font-bold p-4 px-0"
-			href="#/"
+			class="md:block text-left md:pb-2 text-gray-600 dark:text-slate-400 mr-0 inline-block whitespace-nowrap text-sm uppercase font-bold p-4 px-0"
+			href="/dashboard"
 		>
 			EzGizer
 		</a>
@@ -61,7 +63,7 @@
 				<div class="flex flex-wrap">
 					<div class="w-6/12">
 						<a
-							class="md:block text-left md:pb-2 text-gray-600 mr-0 inline-block whitespace-nowrap text-sm uppercase font-bold p-4 px-0"
+							class="md:block text-left md:pb-2 text-gray-600 dark:text-gray-400 mr-0 inline-block whitespace-nowrap text-sm uppercase font-bold p-4 px-0"
 							href="/"
 						>
 							EZGIZER
@@ -70,7 +72,7 @@
 					<div class="w-6/12 flex justify-end">
 						<button
 							type="button"
-							class="cursor-pointer text-black opacity-50 md:hidden px-3 py-1 text-xl leading-none bg-transparent rounded border border-solid border-transparent"
+							class="cursor-pointer text-black dark:text-white opacity-50 md:hidden px-3 py-1 text-xl leading-none bg-transparent rounded border border-solid border-transparent"
 							on:click={() => toggleCollapseShow('hidden')}
 						>
 							<Icon class=" w-7 h-7" icon="material-symbols:close-rounded" />
@@ -82,7 +84,7 @@
 			<hr class="my-4 md:min-w-full hidden md:block" />
 
 			<h6
-				class="md:min-w-full text-gray-500 text-xs uppercase font-bold block pt-1 pb-4 no-underline"
+				class="md:min-w-full text-gray-600 dark:text-gray-400 text-xs uppercase font-bold block pt-1 pb-4 no-underline"
 			>
 				Dashboard
 			</h6>
@@ -106,8 +108,8 @@
 
 			<hr class="my-4 md:min-w-full" />
 
-			<ul class="md:flex-col md:min-w-full flex flex-col list-none">
-				<li class="items-center">
+			<ul class="md:flex-col md:min-w-full flex flex-between list-none">
+				<li class="items-center w-full">
 					<button on:click={() => signOut()} class="button">
 						<span class="text-xs uppercase py-3 font-bold block ">
 							<div class=" flex items-center">
@@ -116,6 +118,9 @@
 							</div>
 						</span>
 					</button>
+				</li>
+				<li class="block lg:hidden md:hidden">
+					<ThemeSwitch position={'sidebar'} />
 				</li>
 			</ul>
 		</div>

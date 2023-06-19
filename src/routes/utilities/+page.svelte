@@ -216,7 +216,7 @@
 		<div class="ml-2 relative">
 			<button
 				type="button"
-				class="inline-flex justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 "
+				class="inline-flex justify-center rounded-md border border-gray-300 bg-white dark:bg-slate-700 px-4 py-2 text-sm font-medium text-gray-700 dark:text-white shadow-sm hover:bg-gray-50 "
 				on:click={() => (showYear = !showYear)}
 				bind:this={container}
 			>
@@ -228,7 +228,7 @@
 				<div
 					in:scale={{ duration: 100, start: 0.95 }}
 					out:scale={{ duration: 75, start: 0.95 }}
-					class="absolute z-20 mt-2 w-24 rounded-md overflow-auto h-32 bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+					class="absolute z-20 mt-2 w-24 rounded-md overflow-auto h-32 bg-white dark:bg-slate-700 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
 				>
 					{#each years as year}
 						<div
@@ -239,7 +239,7 @@
 							}}
 							role="none"
 						>
-							<span class={`text-gray-700 block px-4 py-2 text-sm`}>{year}</span>
+							<span class={`text-gray-700 dark:text-white block px-4 py-2 text-sm`}>{year}</span>
 						</div>
 					{/each}
 				</div>
@@ -255,25 +255,28 @@
 				<div class="flex-none text-sm">
 					<button
 						on:click={() => showDropdownOptions()}
-						class="flex flex-row justify-between w-32 px-2 py-2 text-gray-700 bg-white rounded-md border border-gray-300"
+						class="flex flex-row justify-between w-32 px-2 py-2 text-gray-700 dark:text-white bg-white dark:bg-slate-700 rounded-md border border-gray-300"
 					>
 						<span class="select-none">Status: {currentStatus}</span>
 
 						<Icon id="arrow-down" class="hidden w-5 h-5 stroke-current" icon="mdi:chevron-down" />
 						<Icon id="arrow-up" class="w-5 h-5 stroke-current" icon="mdi:chevron-up" />
 					</button>
-					<div id="options" class="hidden absolute w-32 py-2 mt-2 bg-white rounded-lg shadow-xl">
+					<div
+						id="options"
+						class="hidden absolute w-32 py-2 mt-2 bg-white dark:bg-slate-700 rounded-lg shadow-xl"
+					>
 						<button
 							on:click={() => handleChangeQuery({ status: 'all' })}
-							class="block px-4 py-2 text-gray-800">All</button
+							class="block px-4 py-2 text-gray-800 dark:text-white">All</button
 						>
 						<button
 							on:click={() => handleChangeQuery({ status: 1 })}
-							class="block px-4 py-2 text-gray-800">Completed</button
+							class="block px-4 py-2 text-gray-800 dark:text-white">Completed</button
 						>
 						<button
 							on:click={() => handleChangeQuery({ status: 0 })}
-							class="block px-4 py-2 text-gray-800">Pending</button
+							class="block px-4 py-2 text-gray-800 dark:text-white">Pending</button
 						>
 					</div>
 				</div>
@@ -281,7 +284,7 @@
 
 			<div class="relative flex w-full flex-wrap items-stretch">
 				<span
-					class=" md:hidden relative inline-flex items-center px-3 py-3 space-x-2 text-sm font-medium text-gray-600 bg-white border border-gray-300 rounded-md sm:py-2"
+					class=" md:hidden relative inline-flex items-center px-3 py-3 space-x-2 text-sm font-medium text-gray-600 bg-white dark:bg-slate-700 border border-gray-300 rounded-md sm:py-2"
 				>
 					<Icon class="w-3 h-3" icon="ic:round-search" />
 				</span>
@@ -296,7 +299,7 @@
 						on:input={(e) => handleChangeQuery({ q: e.target.value })}
 						type="text"
 						placeholder="Search name"
-						class="border-0 px-2 py-2 placeholder-gray-300 text-gray-600 relative bg-white rounded text-sm shadow outline-none focus:outline-none focus:ring w-full pl-10"
+						class="border-0 px-2 py-2 placeholder-gray-300 text-gray-600 dark:text-white relative bg-white dark:bg-slate-700 rounded text-sm shadow outline-none focus:outline-none focus:ring w-full pl-10"
 					/>
 				</div>
 			</div>
@@ -313,8 +316,8 @@
 						<span
 							use:scrollOnActive={current_month === month.value}
 							class={`${
-								current_month === month.value ? 'bg-gray-300' : ''
-							} relative inline-flex items-center px-3 py-3 space-x-2 text-sm font-medium text-gray-600 bg-white border border-gray-300 rounded-md sm:py-2`}
+								current_month === month.value ? 'bg-gray-300 dark:bg-white ' : 'dark:text-white'
+							} relative inline-flex items-center px-3 py-3 space-x-2 text-sm font-medium text-gray-600 bg-white dark:bg-slate-700 border border-gray-300 dark:border-none rounded-md sm:py-2`}
 						>
 							<span value={month.value}>{month.name_abbr}</span>
 						</span>
@@ -329,14 +332,17 @@
 				class="relative z-0 inline-flex text-sm rounded-md shadow-sm focus:ring-accent-500 focus:border-accent-500 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1"
 			>
 				<span
-					class="relative inline-flex items-center px-3 py-2 space-x-2 text-sm font-medium text-gray-600 bg-white border border-gray-300 rounded-md sm:py-2"
+					class="relative inline-flex items-center px-3 py-2 space-x-2 text-sm font-medium text-gray-600 dark:text-white bg-white dark:bg-slate-700 border border-gray-300 rounded-md sm:py-2"
 				>
 					<Icon class=" w-4 h-4" icon="material-symbols:add" /> Add New
 				</span>
 			</button>
 		</div>
 
-		<table slot="table" class="min-w-full divide-y divide-gray-200 bg-white">
+		<table
+			slot="table"
+			class="min-w-full divide-y divide-gray-200 dark:divide-gray-500 bg-white dark:bg-slate-700"
+		>
 			<thead>
 				<tr>
 					<th scope="col" class="py-3 pl-4 hidden lg:block">
@@ -349,12 +355,15 @@
 							<label for="checkbox" class="sr-only"> Checkbox </label>
 						</div> -->
 					</th>
-					<th scope="col" class="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase ">
+					<th
+						scope="col"
+						class="px-6 py-3 text-xs font-bold text-left text-gray-500 dark:text-white uppercase "
+					>
 						Name
 					</th>
 					<th
 						scope="col"
-						class="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase hidden lg:block"
+						class="px-6 py-3 text-xs font-bold text-left text-gray-500 dark:text-white uppercase hidden lg:block"
 					>
 						Category
 					</th>
@@ -366,33 +375,45 @@
 								handleChangeQuery({ sort: sortValue });
 							}}
 						>
-							<span class="text-xs font-bold text-left text-gray-500 uppercase">Price</span>
+							<span class="text-xs font-bold text-left text-gray-500 dark:text-white uppercase"
+								>Price</span
+							>
 							<Icon icon="bxs:sort-alt" />
 						</button>
 					</th>
-					<th scope="col" class="px-6 py-3 text-xs font-bold text-right text-gray-500 uppercase ">
+					<th
+						scope="col"
+						class="px-6 py-3 text-xs font-bold text-right text-gray-500 dark:text-white uppercase "
+					>
 						Status
 					</th>
-					<th scope="col" class="px-6 py-3 text-xs font-bold text-right text-gray-500 uppercase " />
+					<th
+						scope="col"
+						class="px-6 py-3 text-xs font-bold text-right text-gray-500 dark:text-white uppercase "
+					/>
 				</tr>
 			</thead>
-			<tbody class="divide-y divide-gray-200">
+			<tbody class="divide-y divide-gray-200 dark:divide-gray-500">
 				{#each $items as item, i}
 					<tr>
 						<td
-							class="px-6 py-4 text-sm font-medium text-gray-800 whitespace-nowrap hidden lg:block"
+							class="px-6 py-4 text-sm font-medium text-gray-800 dark:text-white whitespace-nowrap hidden lg:block"
 						>
 							{i + 1}
 						</td>
-						<td class="px-6 py-4 text-sm text-gray-800 whitespace-nowrap"> {item.name} </td>
-						<td class="px-6 py-4 text-sm text-gray-800 whitespace-nowrap w-[20%] hidden lg:block">
+						<td class="px-6 py-4 text-sm text-gray-800 dark:text-white whitespace-nowrap">
+							{item.name}
+						</td>
+						<td
+							class="px-6 py-4 text-sm text-gray-800 dark:text-white whitespace-nowrap w-[20%] hidden lg:block"
+						>
 							{#await getCategoryName(item.category)}
 								<Icon class=" w-4 h-4" icon="eos-icons:loading" />
 							{:then { category }}
 								{category.name}
 							{/await}
 						</td>
-						<td class="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">
+						<td class="px-6 py-4 text-sm text-gray-800 dark:text-white whitespace-nowrap">
 							RM {item.price}
 						</td>
 						<td class="px-6 py-4 text-sm font-medium text-right whitespace-nowrap">
@@ -423,7 +444,9 @@
 					<td class="hidden lg:block" />
 					<td />
 					<td class="hidden lg:block" />
-					<td class=" px-6 py-4 text-sm text-gray-800 whitespace-nowrap font-bold">RM {total}</td>
+					<td class=" px-6 py-4 text-sm text-gray-800 dark:text-white whitespace-nowrap font-bold"
+						>RM {total}</td
+					>
 					<td />
 					<td />
 				</tr>
@@ -450,13 +473,13 @@
 				<div class="flex flex-wrap -mx-3 mb-6">
 					<div class="w-full flex-grow md:w-1/2 px-3 mb-6 md:mb-0">
 						<label
-							class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+							class="block uppercase tracking-wide text-gray-700 dark:text-white text-xs font-bold mb-2"
 							for="name"
 						>
 							Name
 						</label>
 						<input
-							class="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+							class="appearance-none block w-full bg-gray-200 text-gray-700 dark:text-white border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white dark:bg-slate-700"
 							name="name"
 							type="text"
 							placeholder="Plumbing services"
@@ -481,7 +504,7 @@
 
 					<div class="w-full md:w-1/3 px-3">
 						<label
-							class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+							class="block uppercase tracking-wide text-gray-700 dark:text-white text-xs font-bold mb-2"
 							for="category"
 						>
 							Category
@@ -492,7 +515,7 @@
 								name="category"
 								autocomplete="category"
 								required
-								class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+								class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 dark:text-white py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white dark:bg-slate-700 focus:border-gray-500"
 							>
 								{#each dataCategories as category}
 									<option
@@ -504,7 +527,7 @@
 								{/each}
 							</select>
 							<div
-								class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700"
+								class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-white"
 							>
 								<svg
 									class="fill-current h-4 w-4"
@@ -521,15 +544,15 @@
 				<div class="flex flex-wrap -mx-3 mb-6">
 					<div class="w-full md:w-1/3 px-3 mb-6 md:mb-0">
 						<label
-							class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+							class="block uppercase tracking-wide text-gray-700 dark:text-white text-xs font-bold mb-2"
 							for="price"
 						>
 							Price
 						</label>
-						<div class=" flex items-center gap-2 bg-gray-200">
+						<div class=" flex items-center gap-2 bg-gray-200 dark:bg-slate-700">
 							<span class=" text-sm pl-2 ">RM</span>
 							<input
-								class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-2 leading-tight focus:outline-none focus:bg-white "
+								class="appearance-none block w-full bg-gray-200 text-gray-700 dark:text-white border border-gray-200 rounded py-3 px-2 leading-tight focus:outline-none focus:bg-white dark:bg-slate-700 "
 								name="price"
 								type="text"
 								value={selecteditem?.price ? selecteditem.price : ''}
@@ -538,7 +561,7 @@
 					</div>
 					<div class="w-full md:w-1/3 px-3 mb-6 md:mb-0">
 						<label
-							class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+							class="block uppercase tracking-wide text-gray-700 dark:text-white text-xs font-bold mb-2"
 							for="status"
 						>
 							Status
@@ -553,12 +576,12 @@
 					</div>
 					<div class="w-full md:w-1/3 px-3 mb-6 md:mb-0">
 						<label
-							class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+							class="block uppercase tracking-wide text-gray-700 dark:text-white text-xs font-bold mb-2"
 							for="recurring"
 						>
 							Recurring
 						</label>
-						<!-- class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" -->
+						<!-- class="appearance-none block w-full bg-gray-200 text-gray-700 dark:text-white border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white dark:bg-slate-700 focus:border-gray-500" -->
 						<input
 							type="checkbox"
 							id="recurring"
@@ -571,7 +594,7 @@
 				<div class="flex flex-wrap -mx-3 mb-6">
 					<div class="w-full px-3">
 						<label
-							class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+							class="block uppercase tracking-wide text-gray-700 dark:text-white text-xs font-bold mb-2"
 							for="description"
 						>
 							Description
@@ -580,7 +603,7 @@
 							id="description"
 							name="description"
 							rows="4"
-							class="block p-2.5 w-full rounded border bg-gray-200 text-gray-700 border-gray-200 leading-tight focus:outline-none focus:bg-white"
+							class="block p-2.5 w-full rounded border bg-gray-200 text-gray-700 dark:text-white border-gray-200 leading-tight focus:outline-none focus:bg-white dark:bg-slate-700"
 							value={selecteditem?.description || ''}
 						/>
 

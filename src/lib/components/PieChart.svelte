@@ -48,7 +48,7 @@
 		<div class=" w-full">
 			<Pie data={config} options={{ responsive: true }} />
 		</div>
-		<div class=" flex align-middle justify-center gap-1 mb-2 font-bold">
+		<div class=" flex align-middle justify-center gap-1 my-2 font-bold">
 			<button
 				on:click={() => handleCategoryType('price')}
 				class:active={active === 'price'}

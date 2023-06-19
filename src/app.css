@@ -5,6 +5,8 @@
 @layer base {
 	body {
 		font-family: 'Montserrat', sans-serif;
+		transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+		@apply bg-white dark:bg-slate-800 text-black dark:text-white;
 	}
 	h1,
 	h2,

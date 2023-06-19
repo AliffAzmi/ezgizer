@@ -11,7 +11,7 @@
 
 	let categories = [];
 	let showModal = false;
-	let actionLabel = 'Add';
+	let actionLabel = 'Add new';
 	$: selectedCategory = {};
 
 	onMount(async () => {
@@ -82,32 +82,48 @@
 				class="relative z-0 inline-flex text-sm rounded-md shadow-sm focus:ring-accent-500 focus:border-accent-500 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1"
 			>
 				<span
-					class="relative inline-flex items-center px-3 py-3 space-x-2 text-sm font-medium text-gray-600 bg-white border border-gray-300 rounded-md sm:py-2"
+					class="relative inline-flex items-center px-3 py-3 space-x-2 text-sm font-medium text-gray-600 dark:text-white bg-white dark:bg-slate-700 border border-gray-300 rounded-md sm:py-2"
 				>
 					<Icon class=" w-4 h-4" icon="material-symbols:add" />
 				</span>
 			</button>
 		</div>
 
-		<table slot="table" class="min-w-full divide-y divide-gray-200 bg-white">
+		<table
+			slot="table"
+			class="min-w-full divide-y divide-gray-200 dark:divide-gray-500 bg-white dark:bg-slate-700"
+		>
 			<thead>
 				<tr>
-					<th scope="col" class="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase " />
-					<th scope="col" class="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase ">
+					<th
+						scope="col"
+						class="px-6 py-3 text-xs font-bold text-left text-gray-500 dark:text-white uppercase "
+					/>
+					<th
+						scope="col"
+						class="px-6 py-3 text-xs font-bold text-left text-gray-500 dark:text-white uppercase "
+					>
 						Name
 					</th>
-					<th scope="col" class="px-6 py-3 text-xs font-bold text-right text-gray-500 uppercase ">
+					<th
+						scope="col"
+						class="px-6 py-3 text-xs font-bold text-right text-gray-500 dark:text-white uppercase "
+					>
 						Actions
 					</th>
 				</tr>
 			</thead>
-			<tbody class="divide-y divide-gray-200">
+			<tbody class="divide-y divide-gray-200 dark:divide-gray-500">
 				{#each categories as item, i}
 					<tr>
-						<td class="px-6 py-4 text-sm font-medium text-gray-800 whitespace-nowrap">
+						<td
+							class="px-6 py-4 text-sm font-medium text-gray-800 dark:text-white whitespace-nowrap"
+						>
 							{i + 1}
 						</td>
-						<td class="px-6 py-4 text-sm text-gray-800 whitespace-nowrap"> {item.name} </td>
+						<td class="px-6 py-4 text-sm text-gray-800 dark:text-white whitespace-nowrap">
+							{item.name}
+						</td>
 						<td class="px-6 py-4 text-sm font-medium text-right whitespace-nowrap">
 							<button on:click={() => handleUpsert('Edit', item)}>
 								<Icon
@@ -129,19 +145,19 @@
 	</Table>
 </div>
 
-<Modal title={`${actionLabel} your category`} open={showModal} on:close={() => (showModal = false)}>
+<Modal title={`${actionLabel} category`} open={showModal} on:close={() => (showModal = false)}>
 	<svelte:fragment slot="body">
 		<form on:submit|preventDefault={handleSubmit}>
 			<div class="flex flex-wrap -mx-3 mb-6">
 				<div class="w-full flex-grow md:w-1/2 px-3 mb-6 md:mb-0">
 					<label
-						class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+						class="block uppercase tracking-wide text-gray-700 dark:text-white text-xs font-bold mb-2"
 						for="name"
 					>
 						Name
 					</label>
 					<input
-						class="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+						class="appearance-none block w-full bg-gray-200 dark:bg-slate-700 text-gray-700 dark:text-white border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
 						name="name"
 						type="text"
 						required

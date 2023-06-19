@@ -27,7 +27,7 @@
 			{#if loading}
 				loading...
 			{:else if items.length}
-				<div class=" border rounded-lg">
+				<div class=" border dark:border-none rounded">
 					<slot name="table" />
 				</div>
 			{:else}

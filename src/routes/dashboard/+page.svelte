@@ -1,11 +1,11 @@
 <script>
 	import { onMount } from 'svelte';
-	// import { page } from '$app/stores';
 	import Flatpickr from 'svelte-flatpickr';
 	import monthSelectPlugin from 'flatpickr/dist/plugins/monthSelect';
 
-	import Top from '$lib/components/Top.svelte';
 	import Icon from '@iconify/svelte';
+	import Top from '$lib/components/Top.svelte';
+	import { theme } from '$lib/stores';
 
 	import 'flatpickr/dist/flatpickr.css';
 	import 'flatpickr/dist/plugins/monthSelect/style.css';
@@ -16,27 +16,41 @@
 	let spentFigure = 0;
 	let mostUtilitesList = [];
 	let mostCategoriesList = [];
+	let options = {};
 	let current_month = `${
 		new Date().toLocaleString('en-US', { month: '2-digit', timeZone: 'Asia/Singapore' }) || '12'
 	}`;
 	let current_year = new Date().getFullYear() || 2022;
+	$: isDarkTheme = $theme === 'dark' ? true : false;
 	$: periodKey = `${current_month}-${current_year}`;
 
-	const options = {
+	$: options = {
 		disableMobile: true,
-		animate: true,
+		// animate: true,
 		altFormat: 'F Y',
 		altInput: true,
 		plugins: [
 			new monthSelectPlugin({
 				shorthand: true,
 				dateFormat: 'm-Y',
-				altFormat: 'F Y'
+				altFormat: 'F Y',
+				theme: isDarkTheme ? 'dark' : 'light'
 			})
 		],
 		onChange(selectedDates, dateStr) {
 			periodKey = dateStr;
 			init();
+		},
+		onOpen(selectedDates, dateStr, instance) {
+			// instance.set('plugins', [
+			// 	new monthSelectPlugin({
+			// 		shorthand: true,
+			// 		dateFormat: 'm-Y',
+			// 		altFormat: 'F Y',
+			// 		theme: isDarkTheme ? 'dark' : ''
+			// 	})
+			// ]);
+			// instance.redraw();
 		}
 	};
 
@@ -126,11 +140,11 @@
 					<div class="relative mt-2 rounded-md shadow-sm">
 						<input
 							type="text"
-							class="block w-full rounded-md border-0 py-1.5 pl-2 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+							class="block w-full rounded-md border-0 py-1.5 pl-2 pr-20 dark:bg-slate-700 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
 							data-input
 						/>
 						<div class="absolute inset-y-0 right-0 mr-2 flex items-center">
-							<Icon class="text-gray-500 sm:text-sm" icon="fluent-mdl2:calendar-year" />
+							<Icon class=" sm:text-sm" icon="fluent-mdl2:calendar-year" />
 						</div>
 					</div>
 				</div>
@@ -141,13 +155,15 @@
 			{#each topAnalytics as topAnalytic}
 				<div class="w-full lg:w-6/12 xl:w-3/12 px-4">
 					<div
-						class="relative flex flex-col min-w-0 break-words bg-white rounded mb-6 xl:mb-0 shadow-lg"
+						class="relative flex flex-col min-w-0 break-words bg-white dark:bg-slate-700 rounded mb-6 xl:mb-0 shadow-lg"
 					>
 						<div class="flex-auto p-4">
 							<div class="flex flex-wrap">
 								<div class="relative w-full max-w-full flex-grow flex-1">
 									<h5 class="text-gray-400 uppercase font-bold text-xs">{topAnalytic.name}</h5>
-									<span class="font-semibold text-xl text-gray-700">{topAnalytic.figure}</span>
+									<span class="font-semibold text-xl text-gray-700 dark:text-white"
+										>{topAnalytic.figure}</span
+									>
 								</div>
 								<div class="relative w-auto flex-initial">
 									<div
@@ -172,12 +188,12 @@
 	<div class="flex flex-wrap mt-4">
 		<div class="w-full xl:w-8/12 mb-12 xl:mb-0 px-4">
 			<div
-				class="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded"
+				class="relative flex flex-col min-w-0 break-words bg-white dark:bg-slate-700 w-full mb-6 shadow-lg rounded"
 			>
 				<div class="rounded-t mb-0 px-4 py-3 border-0">
 					<div class="flex flex-wrap items-center">
 						<div class="relative w-full px-2 max-w-full flex-grow flex-1">
-							<h3 class="font-semibold text-base text-gray-700">Utilities</h3>
+							<h3 class="font-semibold text-base text-gray-700 dark:text-white">Utilities</h3>
 						</div>
 						<div class="relative w-full px-4 max-w-full flex-grow flex-1 text-right">
 							<button
@@ -194,33 +210,37 @@
 						<thead>
 							<tr>
 								<th
-									class="px-6 bg-gray-50 text-gray-500 align-middle border border-solid border-gray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
+									class="px-6 bg-gray-50 dark:bg-slate-700 text-gray-500 dark:text-white align-middle border border-solid border-gray-100 dark:border-gray-500 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
 								>
 									Name
 								</th>
 								<th
-									class="px-6 bg-gray-50 text-gray-500 align-middle border border-solid border-gray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
+									class=" hidden md:block lg:block px-6 bg-gray-50 dark:bg-slate-700 text-gray-500 dark:text-white align-middle border border-solid border-gray-100 dark:border-gray-500 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
 									>Category</th
 								>
 								<th
-									class="px-6 bg-gray-50 text-gray-500 align-middle border border-solid border-gray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
+									class="px-6 bg-gray-50 dark:bg-slate-700 text-gray-500 dark:text-white align-middle border border-solid border-gray-100 dark:border-gray-500 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
 									>Price</th
 								>
 								<th
-									class="px-6 bg-gray-50 text-gray-500 align-middle border border-solid border-gray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
+									class="px-6 bg-gray-50 dark:bg-slate-700 text-gray-500 dark:text-white align-middle border border-solid border-gray-100 dark:border-gray-500 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
 								/>
 							</tr>
 						</thead>
 						<tbody>
 							{#each mostUtilitesList as utility}
-								<tr class="border-white {utility?.status ? 'bg-green-100 border-t-2' : ''}">
+								<tr
+									class="border-white {utility?.status
+										? 'bg-green-100 dark:text-black border-t-2'
+										: ''}"
+								>
 									<th
 										class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left"
 									>
 										{utility.name}
 									</th>
 									<td
-										class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4"
+										class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 hidden md:block lg:block"
 									>
 										{#await getCategoryName(utility.category)}
 											<Icon class=" w-4 h-4" icon="eos-icons:loading" />
@@ -251,12 +271,12 @@
 
 		<div class="w-full xl:w-4/12 px-4">
 			<div
-				class="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded"
+				class="relative flex flex-col min-w-0 break-words bg-white dark:bg-slate-700 w-full mb-6 shadow-lg rounded"
 			>
 				<div class="rounded-t mb-0 px-4 py-3 border-0">
 					<div class="flex flex-wrap items-center">
 						<div class="relative w-full px-2 max-w-full flex-grow flex-1">
-							<h3 class="font-semibold text-base text-gray-700">Categories</h3>
+							<h3 class="font-semibold text-base text-gray-700 dark:text-white">Categories</h3>
 						</div>
 						<div class="relative w-full px-4 max-w-full flex-grow flex-1 text-right">
 							<button
@@ -275,15 +295,15 @@
 						<thead class="thead-light">
 							<tr>
 								<th
-									class="px-6 bg-gray-50 text-gray-500 align-middle border border-solid border-gray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
+									class="px-6 bg-gray-50 dark:bg-slate-700 text-gray-500 dark:text-white align-middle border border-solid border-gray-100 dark:border-gray-500 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
 									>Name</th
 								>
 								<th
-									class="px-6 bg-gray-50 text-gray-500 align-middle border border-solid border-gray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
+									class="px-6 bg-gray-50 dark:bg-slate-700 text-gray-500 dark:text-white align-middle border border-solid border-gray-100 dark:border-gray-500 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
 									>Price</th
 								>
 								<th
-									class="px-6 bg-gray-50 text-gray-500 align-middle border border-solid border-gray-100 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left min-w-140-px"
+									class="px-6 bg-gray-50 dark:bg-slate-700 text-gray-500 dark:text-white align-middle border border-solid border-gray-100 dark:border-gray-500 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left min-w-140-px"
 									>Txns</th
 								>
 							</tr>

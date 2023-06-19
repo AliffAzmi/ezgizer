@@ -14,12 +14,12 @@
 	>
 		<div class="modal-overlay fixed w-full h-full bg-gray-900 opacity-50" />
 		<div
-			class="bg-white w-full lg:h-max lg:w-1/2  mx-auto rounded-lg shadow-xl z-50 overflow-y-auto"
+			class="bg-white dark:bg-slate-800 w-full lg:h-max lg:w-1/2  mx-auto rounded-lg shadow-xl z-50 overflow-y-auto"
 			in:fly={{ y: -50, duration: 300 }}
 			out:fly={{ y: -50, duration: 300, easing: quintOut }}
 		>
 			<div
-				class="flex justify-between items-center head bg-gray-100 py-5 px-8 text-2xl font-extrabold"
+				class="flex justify-between items-center head bg-gray-100 dark:bg-slate-800 py-5 px-8 text-2xl font-extrabold"
 			>
 				{title}
 				<button
