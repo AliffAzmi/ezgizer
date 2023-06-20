@@ -1,13 +1,16 @@
 <script>
+	import { onMount } from 'svelte';
 	import { Pie } from 'svelte-chartjs';
 	import { Chart as ChartJS, Title, Tooltip, Legend, ArcElement, CategoryScale } from 'chart.js';
-	import { onMount } from 'svelte';
+	import { convertCurrency } from '$lib/utils';
 
 	export let data;
+	export let currency;
+
 	let mount = false;
 	let config;
 	let active = 'price';
-	let label = 'RM ';
+	let label = ` ${convertCurrency(currency, 0)} `;
 	$: labels = data.length ? data.map((item) => item.name) : [];
 	$: payload = data.length ? data.map((item) => item.price) : [];
 
@@ -35,7 +38,7 @@
 		active = type;
 		if (type === 'price') {
 			payload = data.map((item) => item.price);
-			label = 'RM';
+			label = ` ${convertCurrency(currency, 0)} `;
 		} else {
 			payload = data.map((item) => item.txns);
 			label = 'No. of Transactions';

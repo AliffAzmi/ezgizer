@@ -3,11 +3,23 @@ import md5 from 'md5'
 // import { ObjectId } from 'mongodb'
 const utilities = client.collection('utilities')
 
-export async function GET ({ url, params }) {
+export async function GET ({ locals, url, params }) {
 	try {
-		const user_id = url.searchParams.get('user_id') || '1a012aadd'
+		const { getSession } = locals
+		const session = await getSession()
+
+		let user_id
+		user_id = session ? session?.user?.id : ''
+
 		const month_year = url.searchParams.get('month_year') || '11-22'
 		const { status } = JSON.parse(url.searchParams.get('queries')) || {}
+
+		if (!user_id) {
+			return new Response(JSON.stringify({ message: 'undefined user' }), {
+				status: 404
+			})
+		}
+
 		try {
 			const res = await utilities.findOne({ user_id, month_year })
 			if (status || status === 0) {

@@ -7,7 +7,6 @@
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
 
-	import dataCategories from '$lib/data/categories.js';
 	import months from '$lib/data/months.js';
 	import { years } from '$lib/data/years';
 	import { convertCurrency } from '$lib/utils';
@@ -34,6 +33,7 @@
 	let queries = {};
 	$: sortValue = true;
 	$: total = 0;
+	$: dataCategories = [];
 
 	onMount(async () => {
 		if (period) {
@@ -54,23 +54,29 @@
 
 		await getUtilities(period);
 		await handleGetMonthTranslation();
+		await getCategories();
 	});
+
+	const getCategories = async () => {
+		const response = await fetch(`/api/categories`, {
+			method: 'GET'
+		});
+		const { category } = await response.json();
+		dataCategories = category;
+	};
 
 	const handleGetMonthTranslation = () => {
 		current_month_name = months.find((m) => m.value === current_month).name || '';
 	};
 
 	const getUtilities = async (period) => {
-		const user_id = '1a012aadd';
 		const month_year = period ? period : `${current_month}-${current_year}`;
 
 		url.searchParams.set('period', month_year);
 		goto(`?${url.searchParams.toString()}`);
 
 		const response = await fetch(
-			`/api/utilities?user_id=${user_id}&month_year=${month_year}&queries=${JSON.stringify(
-				queries
-			)}`,
+			`/api/utilities?month_year=${month_year}&queries=${JSON.stringify(queries)}`,
 			{
 				method: 'GET'
 			}
@@ -120,7 +126,7 @@
 
 	const handleSubmit = async () => {
 		const itemsData = {};
-		itemsData.user_id = '1a012aadd';
+		itemsData.user_id = data?.user?.id;
 		itemsData.month_year = `${current_month}-${current_year}`;
 		itemsData.items = $items;
 
@@ -513,29 +519,39 @@
 						>
 							Category
 						</label>
-						<div class="relative">
-							<select id="category" name="category" autocomplete="category" required>
-								{#each dataCategories as category}
-									<option
-										value={category.value}
-										selected={selecteditem?.category && selecteditem?.category === category.value
-											? true
-											: false}>{category.name}</option
-									>
-								{/each}
-							</select>
-							<div
-								class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-white"
-							>
-								<svg
-									class="fill-current h-4 w-4"
-									xmlns="http://www.w3.org/2000/svg"
-									viewBox="0 0 20 20"
-									><path
-										d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"
-									/></svg
+						<div class=" flex items-center gap-1">
+							<div class="relative flex-grow">
+								<select id="category" name="category" autocomplete="category" required>
+									{#each dataCategories as category}
+										<option
+											value={category.value}
+											selected={selecteditem?.category && selecteditem?.category === category.value
+												? true
+												: false}>{category.name}</option
+										>
+									{/each}
+								</select>
+								<div
+									class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-white"
 								>
+									<svg
+										class="fill-current h-4 w-4"
+										xmlns="http://www.w3.org/2000/svg"
+										viewBox="0 0 20 20"
+										><path
+											d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"
+										/></svg
+									>
+								</div>
 							</div>
+							<a href="/categories">
+								<Icon
+									icon="gridicons:add-outline"
+									width="24"
+									height="24"
+									class=" cursor-pointer hover:text-blue-600"
+								/>
+							</a>
 						</div>
 					</div>
 				</div>

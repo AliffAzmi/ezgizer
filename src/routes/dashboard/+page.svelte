@@ -85,9 +85,8 @@
 	];
 
 	const init = async () => {
-		const { id } = await getUsers();
 		const { total, pending, spent, performance, most_utilities, most_categories } =
-			await getOverallReports(id);
+			await getOverallReports();
 
 		totalFigure = await convertCurrency(data?.setting?.currency, total, true);
 		pendingFigure = await convertCurrency(data?.setting?.currency, pending, true);
@@ -106,19 +105,11 @@
 		return res.json();
 	};
 
-	const getOverallReports = async (id) => {
-		const response = await fetch(`/api/reports/overall?user_id=1a012aadd&period=${periodKey}`, {
+	const getOverallReports = async () => {
+		const response = await fetch(`/api/reports/overall?period=${periodKey}`, {
 			method: 'GET'
 		});
 		return await response.json();
-	};
-
-	const getUsers = async () => {
-		const response = await fetch('/api/users/1a012aadd', {
-			method: 'GET'
-		});
-		const { user } = await response.json();
-		return user;
 	};
 </script>
 
@@ -285,7 +276,7 @@
 
 				<div class="block w-full overflow-x-auto">
 					<div class=" flex justify-center items-center w-full px-6">
-						<PieChart data={mostCategoriesList} />
+						<PieChart currency={data?.setting?.currency} data={mostCategoriesList} />
 					</div>
 					<table class="items-center w-full bg-transparent border-collapse">
 						<thead class="thead-light">

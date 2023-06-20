@@ -2,10 +2,16 @@ import client from '$lib/db'
 import { getDiffPercentage } from '$lib/utils'
 const utilities = client.collection('utilities')
 
-export async function GET ({ url, params }) {
+export async function GET ({ locals, url, params }) {
 	try {
-		const user_id = url.searchParams.get('user_id')
+		const { getSession } = locals
+		const session = await getSession()
+
+		let user_id
+		user_id = session ? session?.user?.id : ''
+
 		const period = url.searchParams.get('period')
+
 		let payload = []
 		if (!user_id && !period) {
 			return new Response(JSON.stringify({ message: 'missing parameters' }), {

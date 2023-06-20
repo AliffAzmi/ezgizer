@@ -8,7 +8,7 @@
 	import Table from '$lib/components/Table.svelte';
 	import Modal from '$lib/components/Modal.svelte';
 	import Top from '$lib/components/Top.svelte';
-	import dataCategories from '$lib/data/categories.js';
+
 	import { convertCurrency } from '$lib/utils';
 
 	import 'flatpickr/dist/flatpickr.css';
@@ -17,6 +17,7 @@
 	export let data;
 	$: items = [];
 	$: selectedItems = [];
+	$: dataCategories = [];
 	let selected = new Set();
 	let showModal = false;
 	let showItemModal = false;
@@ -65,7 +66,8 @@
 
 	onMount(async () => {
 		await getItems();
-		getCategories();
+		await getCategories();
+		getCategoryName();
 	});
 
 	const removeCalendarSelection = () => {
@@ -79,6 +81,14 @@
 	};
 
 	const getCategories = async () => {
+		const response = await fetch(`/api/categories`, {
+			method: 'GET'
+		});
+		const { category } = await response.json();
+		dataCategories = category;
+	};
+
+	const getCategoryName = async () => {
 		let newItems = [];
 		if (items) {
 			newItems = await Promise.all(
@@ -98,8 +108,7 @@
 	};
 
 	const getItems = async () => {
-		const user_id = '1a012aadd';
-		const response = await fetch(`/api/items?user_id=${user_id}`, {
+		const response = await fetch(`/api/items`, {
 			method: 'GET'
 		});
 		const payload = await response.json();
@@ -135,7 +144,7 @@
 			// build loop year to duplicate
 		} else {
 			const itemsData = {};
-			itemsData.user_id = '1a012aadd';
+			itemsData.user_id = data?.user?.id || '';
 			itemsData.month_year = period.dateStr;
 			itemsData.items = selectedItems;
 
@@ -191,7 +200,7 @@
 	};
 	const handleSubmitItems = async () => {
 		const itemsData = {};
-		itemsData.user_id = '1a012aadd';
+		itemsData.user_id = data?.user?.id || '';
 		itemsData.items = items;
 
 		await fetch('/api/items', {
@@ -226,7 +235,7 @@
 					await getItems()
 						.then(() => (refresh = true))
 						.then(() => {
-							getCategories();
+							getCategoryName();
 							setTimeout(() => {
 								refresh = false;
 							}, 1000);
@@ -466,7 +475,7 @@
 							Name
 						</label>
 						<input
-							class="appearance-none block w-full bg-gray-200 dark:bg-slate-700 text-gray-700 dark:text-white dark:placeholder:text-white border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+							class="appearance-none block w-full bg-gray-200 text-gray-700 dark:text-white border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white dark:bg-slate-700"
 							name="name"
 							type="text"
 							placeholder="Plumbing services"
@@ -496,35 +505,46 @@
 						>
 							Category
 						</label>
-						<div class="relative">
-							<select
-								id="category"
-								name="category"
-								autocomplete="category"
-								required
-								class="block appearance-none w-full bg-gray-200 dark:bg-slate-700 border border-gray-200 text-gray-700 dark:text-white py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-							>
-								{#each dataCategories as category}
-									<option
-										value={category.value}
-										selected={selectedItems?.category && selectedItems?.category === category.value
-											? true
-											: false}>{category.name}</option
-									>
-								{/each}
-							</select>
-							<div
-								class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700"
-							>
-								<svg
-									class="fill-current h-4 w-4"
-									xmlns="http://www.w3.org/2000/svg"
-									viewBox="0 0 20 20"
-									><path
-										d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"
-									/></svg
+						<div class=" flex items-center gap-1">
+							<div class="relative flex-grow">
+								<select
+									id="category"
+									name="category"
+									autocomplete="category"
+									required
+									class="block appearance-none w-full bg-gray-200 dark:bg-slate-700 border border-gray-200 text-gray-700 dark:text-white py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
 								>
+									{#each dataCategories as category}
+										<option
+											value={category.value}
+											selected={selectedItems?.category &&
+											selectedItems?.category === category.value
+												? true
+												: false}>{category.name}</option
+										>
+									{/each}
+								</select>
+								<div
+									class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-white"
+								>
+									<svg
+										class="fill-current h-4 w-4"
+										xmlns="http://www.w3.org/2000/svg"
+										viewBox="0 0 20 20"
+										><path
+											d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"
+										/></svg
+									>
+								</div>
 							</div>
+							<a href="/categories">
+								<Icon
+									icon="gridicons:add-outline"
+									width="24"
+									height="24"
+									class=" cursor-pointer hover:text-blue-600"
+								/>
+							</a>
 						</div>
 					</div>
 				</div>

@@ -1,9 +1,14 @@
 import client from '$lib/db'
 const items = client.collection('items')
 
-export async function GET ({ url, params }) {
+export async function GET ({ locals, url, params }) {
 	try {
-		const user_id = url.searchParams.get('user_id')
+		const { getSession } = locals
+		const session = await getSession()
+
+		let user_id
+		user_id = session ? session?.user?.id : ''
+
 		if (!user_id) {
 			return new Response(JSON.stringify({ message: 'missing user ID' }), {
 				status: 404

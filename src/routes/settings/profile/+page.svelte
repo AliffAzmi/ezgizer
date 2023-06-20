@@ -35,7 +35,7 @@
 					<img
 						alt="..."
 						class="w-20 rounded-full align-middle border-none shadow-lg"
-						src="https://lh3.googleusercontent.com/a/AAcHTtd63dP7f-VXoA_yAqc0SZYtsTwDPpbplLsgUK_4eg=s96-c"
+						src={data?.user?.image || 'http://source.unsplash.com/800x800/?tree'}
 					/>
 					<div class="flex-grow">
 						<label>
