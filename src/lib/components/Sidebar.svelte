@@ -91,7 +91,7 @@
 
 			<ul class="md:flex-col md:min-w-full flex flex-col list-none">
 				{#each routes as route}
-					<li class="items-center" class:active={$page.url.pathname.includes(route.href)}>
+					<li class="items-center" class:active={$page.url.pathname.includes(route.key)}>
 						<a
 							href={route.href}
 							on:click={() => toggleCollapseShow('hidden')}

@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import Flatpickr from 'svelte-flatpickr';
 	import monthSelectPlugin from 'flatpickr/dist/plugins/monthSelect';
+	import { convertCurrency } from '$lib/utils';
 
 	import Icon from '@iconify/svelte';
 	import Top from '$lib/components/Top.svelte';
@@ -9,8 +10,9 @@
 
 	import 'flatpickr/dist/flatpickr.css';
 	import 'flatpickr/dist/plugins/monthSelect/style.css';
-	import PieChart from '../../lib/components/PieChart.svelte';
+	import PieChart from '$lib/components/PieChart.svelte';
 
+	export let data;
 	let totalFigure = 0;
 	let pendingFigure = 0;
 	let spentFigure = 0;
@@ -87,15 +89,9 @@
 		const { total, pending, spent, performance, most_utilities, most_categories } =
 			await getOverallReports(id);
 
-		totalFigure = new Intl.NumberFormat('ta-MY', { style: 'currency', currency: 'MYR' }).format(
-			total || 0
-		);
-		pendingFigure = new Intl.NumberFormat('ta-MY', { style: 'currency', currency: 'MYR' }).format(
-			pending || 0
-		);
-		spentFigure = new Intl.NumberFormat('ta-MY', { style: 'currency', currency: 'MYR' }).format(
-			spent || 0
-		);
+		totalFigure = await convertCurrency(data?.setting?.currency, total, true);
+		pendingFigure = await convertCurrency(data?.setting?.currency, pending, true);
+		spentFigure = await convertCurrency(data?.setting?.currency, spent, true);
 		performanceFigure = Math.round(performance || 0) + '%';
 
 		mostUtilitesList = most_utilities || [];
@@ -220,7 +216,7 @@
 								>
 								<th
 									class="px-6 bg-gray-50 dark:bg-slate-700 text-gray-500 dark:text-white align-middle border border-solid border-gray-100 dark:border-gray-500 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
-									>Price</th
+									>Amount</th
 								>
 								<th
 									class="px-6 bg-gray-50 dark:bg-slate-700 text-gray-500 dark:text-white align-middle border border-solid border-gray-100 dark:border-gray-500 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
@@ -300,7 +296,7 @@
 								>
 								<th
 									class="px-6 bg-gray-50 dark:bg-slate-700 text-gray-500 dark:text-white align-middle border border-solid border-gray-100 dark:border-gray-500 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left"
-									>Price</th
+									>Amount</th
 								>
 								<th
 									class="px-6 bg-gray-50 dark:bg-slate-700 text-gray-500 dark:text-white align-middle border border-solid border-gray-100 dark:border-gray-500 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left min-w-140-px"

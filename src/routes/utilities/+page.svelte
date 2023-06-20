@@ -4,15 +4,19 @@
 	import toast, { Toaster } from 'svelte-french-toast';
 	import Icon from '@iconify/svelte';
 	import { scale } from 'svelte/transition';
-	import months from '$lib/data/months.js';
-	import { years } from '$lib/data/years';
-	// import dataitems from '$lib/data/items.js';
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
+
 	import dataCategories from '$lib/data/categories.js';
+	import months from '$lib/data/months.js';
+	import { years } from '$lib/data/years';
+	import { convertCurrency } from '$lib/utils';
+
 	import Modal from '$lib/components/Modal.svelte';
 	import Table from '$lib/components/Table.svelte';
 	import Top from '$lib/components/Top.svelte';
+
+	export let data;
 
 	const url = $page.url;
 	const period = url.searchParams.get('period');
@@ -376,7 +380,7 @@
 							}}
 						>
 							<span class="text-xs font-bold text-left text-gray-500 dark:text-white uppercase"
-								>Price</span
+								>Amount</span
 							>
 							<Icon icon="bxs:sort-alt" />
 						</button>
@@ -414,7 +418,7 @@
 							{/await}
 						</td>
 						<td class="px-6 py-4 text-sm text-gray-800 dark:text-white whitespace-nowrap">
-							RM {item.price}
+							{convertCurrency(data?.setting?.currency, item.price, true)}
 						</td>
 						<td class="px-6 py-4 text-sm font-medium text-right whitespace-nowrap">
 							<input
@@ -444,9 +448,9 @@
 					<td class="hidden lg:block" />
 					<td />
 					<td class="hidden lg:block" />
-					<td class=" px-6 py-4 text-sm text-gray-800 dark:text-white whitespace-nowrap font-bold"
-						>RM {total}</td
-					>
+					<td class=" px-6 py-4 text-sm text-gray-800 dark:text-white whitespace-nowrap font-bold">
+						{convertCurrency(data?.setting?.currency, total, true)}
+					</td>
 					<td />
 					<td />
 				</tr>
@@ -510,13 +514,7 @@
 							Category
 						</label>
 						<div class="relative">
-							<select
-								id="category"
-								name="category"
-								autocomplete="category"
-								required
-								class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 dark:text-white py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white dark:bg-slate-700 focus:border-gray-500"
-							>
+							<select id="category" name="category" autocomplete="category" required>
 								{#each dataCategories as category}
 									<option
 										value={category.value}
@@ -547,10 +545,10 @@
 							class="block uppercase tracking-wide text-gray-700 dark:text-white text-xs font-bold mb-2"
 							for="price"
 						>
-							Price
+							Amount
 						</label>
-						<div class=" flex items-center gap-2 bg-gray-200 dark:bg-slate-700">
-							<span class=" text-sm pl-2 ">RM</span>
+						<div class=" flex items-center gap-2 bg-gray-200 dark:bg-slate-600">
+							<span class=" text-sm pl-2 ">{convertCurrency(data?.setting?.currency, 0)}</span>
 							<input
 								class="appearance-none block w-full bg-gray-200 text-gray-700 dark:text-white border border-gray-200 rounded py-3 px-2 leading-tight focus:outline-none focus:bg-white dark:bg-slate-700 "
 								name="price"

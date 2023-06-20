@@ -9,10 +9,12 @@
 	import Modal from '$lib/components/Modal.svelte';
 	import Top from '$lib/components/Top.svelte';
 	import dataCategories from '$lib/data/categories.js';
+	import { convertCurrency } from '$lib/utils';
 
 	import 'flatpickr/dist/flatpickr.css';
 	import 'flatpickr/dist/plugins/monthSelect/style.css';
 
+	export let data;
 	$: items = [];
 	$: selectedItems = [];
 	let selected = new Set();
@@ -290,7 +292,10 @@
 			</button>
 		</div>
 
-		<table slot="table" class="min-w-full divide-y divide-gray-200 dark:divide-gray-500 bg-white dark:bg-slate-700">
+		<table
+			slot="table"
+			class="min-w-full divide-y divide-gray-200 dark:divide-gray-500 bg-white dark:bg-slate-700"
+		>
 			<thead>
 				<tr>
 					<th scope="col" class="py-3 pl-4">
@@ -304,17 +309,32 @@
 							<label for="checkbox" class="sr-only"> Checkbox </label>
 						</div>
 					</th>
-					<th scope="col" class="px-6 py-3 text-xs font-bold text-left text-gray-500 dark:text-white uppercase " />
-					<th scope="col" class="px-6 py-3 text-xs font-bold text-left text-gray-500 dark:text-white uppercase ">
+					<th
+						scope="col"
+						class="px-6 py-3 text-xs font-bold text-left text-gray-500 dark:text-white uppercase "
+					/>
+					<th
+						scope="col"
+						class="px-6 py-3 text-xs font-bold text-left text-gray-500 dark:text-white uppercase "
+					>
 						Name
 					</th>
-					<th scope="col" class="px-6 py-3 text-xs font-bold text-left text-gray-500 dark:text-white uppercase ">
+					<th
+						scope="col"
+						class="px-6 py-3 text-xs font-bold text-left text-gray-500 dark:text-white uppercase "
+					>
 						Category
 					</th>
-					<th scope="col" class="px-6 py-3 text-xs font-bold text-left text-gray-500 dark:text-white uppercase ">
-						Price
+					<th
+						scope="col"
+						class="px-6 py-3 text-xs font-bold text-left text-gray-500 dark:text-white uppercase "
+					>
+						Amount
 					</th>
-					<th scope="col" class="px-6 py-3 text-xs font-bold text-right text-gray-500 dark:text-white uppercase ">
+					<th
+						scope="col"
+						class="px-6 py-3 text-xs font-bold text-right text-gray-500 dark:text-white uppercase "
+					>
 						Actions
 					</th>
 				</tr>
@@ -335,15 +355,19 @@
 								<label for="checkbox" class="sr-only"> Checkbox </label>
 							</div>
 						</td>
-						<td class="px-6 py-4 text-sm font-medium text-gray-800 dark:text-white whitespace-nowrap">
+						<td
+							class="px-6 py-4 text-sm font-medium text-gray-800 dark:text-white whitespace-nowrap"
+						>
 							{i + 1}
 						</td>
-						<td class="px-6 py-4 text-sm text-gray-800 dark:text-white whitespace-nowrap"> {item.name} </td>
+						<td class="px-6 py-4 text-sm text-gray-800 dark:text-white whitespace-nowrap">
+							{item.name}
+						</td>
 						<td class="px-6 py-4 text-sm text-gray-800 dark:text-white whitespace-nowrap w-[20%]">
 							{item.category_name || item.category}
 						</td>
 						<td class="px-6 py-4 text-sm text-gray-800 dark:text-white whitespace-nowrap">
-							RM {item.price}
+							{convertCurrency(data?.setting?.currency, item.price, true)}
 						</td>
 						<td class="px-6 py-4 text-sm font-medium text-right whitespace-nowrap">
 							<button on:click={() => handleToggleModal('Update', i + 1)}>
@@ -510,10 +534,10 @@
 							class="block uppercase tracking-wide text-gray-700 dark:text-white text-xs font-bold mb-2"
 							for="price"
 						>
-							Price
+							Amount
 						</label>
 						<div class=" flex items-center gap-2 bg-gray-200 dark:bg-slate-700">
-							<span class=" text-sm pl-2 ">RM</span>
+							<span class=" text-sm pl-2 ">{convertCurrency(data?.setting?.currency, 0)}</span>
 							<input
 								class="appearance-none block w-full bg-gray-200 dark:bg-slate-700 text-gray-700 dark:text-white border border-gray-200 rounded py-3 px-2 leading-tight focus:outline-none focus:bg-white "
 								name="price"

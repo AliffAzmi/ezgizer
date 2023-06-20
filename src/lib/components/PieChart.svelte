@@ -52,7 +52,7 @@
 			<button
 				on:click={() => handleCategoryType('price')}
 				class:active={active === 'price'}
-				class="button-xs">PRICE</button
+				class="button-xs">AMOUNT</button
 			>
 			<button
 				on:click={() => handleCategoryType('txns')}

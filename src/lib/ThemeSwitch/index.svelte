@@ -31,11 +31,19 @@
 			}
 		}
 	});
+	let boxShadowStyle = 'inset -22px -20px 1px 1px #ddd';
+	if (position === 'sidebar') {
+		boxShadowStyle = 'inset -14px -12px 1px 1px #ddd';
+	}
 </script>
 
 <div class="items-center flex">
 	<input checked={darkMode} on:click={handleSwitchDarkMode} type="checkbox" id="theme-toggle" />
-	<label for="theme-toggle" class={position === 'sidebar' ? 'h-8 w-8' : 'h-12 w-12'} />
+	<label
+		for="theme-toggle"
+		class={position === 'sidebar' ? 'h-8 w-8 aspect-ratio' : 'h-12 w-12'}
+		style="--box-shadow-style: {boxShadowStyle}"
+	/>
 </div>
 
 <style lang="postcss">
@@ -54,6 +62,6 @@
 
 	#theme-toggle:checked + label {
 		@apply bg-transparent;
-		box-shadow: inset -12px -10px 1px 1px #ddd;
+		box-shadow: var(--box-shadow-style);
 	}
 </style>

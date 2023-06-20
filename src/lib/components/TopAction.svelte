@@ -32,12 +32,14 @@
 				<span class="text-sm font-normal whitespace-nowrap bg-transparent">Profile</span>
 			</div>
 		</a>
-		<!-- <div class="flex items-center gap-2 py-2 px-4 hover:bg-gray-200 hover:text-gray-500 cursor-pointer">
-			<Icon class=" w-5 h-6" icon="ep:setting" />
-			<a href="#nothingness" class="text-sm font-normal whitespace-nowrap bg-transparent"
-				>Settings</a
+		<a href="/settings/general">
+			<div
+				class="flex items-center gap-2 py-2 px-4 hover:bg-gray-200 hover:text-gray-500 cursor-pointer"
 			>
-		</div> -->
+				<Icon class=" w-5 h-6" icon="ep:setting" />
+				<span class="text-sm font-normal whitespace-nowrap bg-transparent">Settings</span>
+			</div>
+		</a>
 
 		<div class="h-0 my-2 border border-dashed border-gray-300" />
 
