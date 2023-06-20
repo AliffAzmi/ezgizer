@@ -3,10 +3,12 @@
 	import { page } from '$app/stores';
 	import routes from '$lib/routes';
 	import Icon from '@iconify/svelte';
+	import { theme } from '$lib/stores';
 
 	import TopAction from './TopAction.svelte';
 	import ThemeSwitch from '$lib/ThemeSwitch/index.svelte';
 
+	$: isDarkTheme = $theme === 'dark' ? true : false;
 	let openUserDropDown = false;
 	let collapseShow = 'hidden';
 	function toggleCollapseShow(classes) {
@@ -33,7 +35,11 @@
 			class="md:block text-left md:pb-2 text-gray-600 dark:text-slate-400 mr-0 inline-block whitespace-nowrap text-sm uppercase font-bold p-4 px-0"
 			href="/dashboard"
 		>
-			EzGizer
+			{#if isDarkTheme}
+				<img src="/images/ezgizer-logo-white.png" alt="ezgizer logo" class=" w-24" />
+			{:else}
+				<img src="/images/ezgizer-logo-black.png" alt="ezgizer logo" class=" w-24" />
+			{/if}
 		</a>
 		<!-- User -->
 		<ul class="md:hidden items-center flex flex-wrap list-none">
@@ -66,7 +72,11 @@
 							class="md:block text-left md:pb-2 text-gray-600 dark:text-gray-400 mr-0 inline-block whitespace-nowrap text-sm uppercase font-bold p-4 px-0"
 							href="/"
 						>
-							EZGIZER
+							{#if isDarkTheme}
+								<img src="/images/ezgizer-logo-white.png" alt="ezgizer logo" class=" w-24" />
+							{:else}
+								<img src="/images/ezgizer-logo-black.png" alt="ezgizer logo" class=" w-24" />
+							{/if}
 						</a>
 					</div>
 					<div class="w-6/12 flex justify-end">
