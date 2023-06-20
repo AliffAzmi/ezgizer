@@ -1,12 +1,12 @@
 <script>
 	import Icon from '@iconify/svelte';
-	import { page } from '$app/stores';
 	import { signOut } from '@auth/sveltekit/client';
 	import { clickOutside } from '$lib/utils';
 
 	export let open;
-	let userName = $page.data.session.user?.name;
-	let userEmail = $page.data.session.user?.email;
+	export let user;
+	$: userName = user?.name;
+	$: userEmail = user?.email;
 </script>
 
 {#if open}
@@ -24,21 +24,26 @@
 
 		<div class="h-0 my-2 border border-dashed border-gray-300" />
 
-		<div class="flex items-center gap-2 py-2 px-4 hover:bg-gray-200 hover:text-gray-500 cursor-pointer">
-			<Icon class=" w-5 h-6" icon="mingcute:user-4-line" />
-			<a href="#nothingness" class="text-sm font-normal whitespace-nowrap bg-transparent">Profile</a
+		<a href="/settings/profile">
+			<div
+				class="flex items-center gap-2 py-2 px-4 hover:bg-gray-200 hover:text-gray-500 cursor-pointer"
 			>
-		</div>
-		<div class="flex items-center gap-2 py-2 px-4 hover:bg-gray-200 hover:text-gray-500 cursor-pointer">
+				<Icon class=" w-5 h-6" icon="mingcute:user-4-line" />
+				<span class="text-sm font-normal whitespace-nowrap bg-transparent">Profile</span>
+			</div>
+		</a>
+		<!-- <div class="flex items-center gap-2 py-2 px-4 hover:bg-gray-200 hover:text-gray-500 cursor-pointer">
 			<Icon class=" w-5 h-6" icon="ep:setting" />
 			<a href="#nothingness" class="text-sm font-normal whitespace-nowrap bg-transparent"
 				>Settings</a
 			>
-		</div>
+		</div> -->
 
 		<div class="h-0 my-2 border border-dashed border-gray-300" />
 
-		<div class="flex items-center gap-2 py-2 px-4 hover:bg-gray-200 hover:text-gray-500 cursor-pointer">
+		<div
+			class="flex items-center gap-2 py-2 px-4 hover:bg-gray-200 hover:text-gray-500 cursor-pointer"
+		>
 			<Icon class=" w-5 h-6" icon="mdi:sign-out" />
 			<button
 				class="text-sm font-normal whitespace-nowrap bg-transparent"

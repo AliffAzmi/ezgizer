@@ -32,13 +32,30 @@ const auth = SvelteKitAuth({
 				return false
 			}
 		},
+		session: async ({ session, token }) => {
+			const userData = await fetch(`${APP_URL}/api/users?email=${session?.user?.email}`, {
+				method: 'GET'
+			})
+			const userResponse = await userData.json()
+			if (session?.user) {
+				session.user.id = userResponse.users.id
+				// session.user.id = token.uid
+			}
+			return session
+		},
 		redirect: async (url, _) => {
 			return Promise.resolve('/dashboard')
 		}
 	}
 })
 
-const restriction = async ({ event, resolve }) => {
+const restriction = async ({ event, resolve, user }) => {
+	// let session = await event.locals.getSession('session')
+	// console.log(event.cookies)
+	// event.locals.user = {
+	// 	name: 'test',
+	// 	role: 'test'
+	// }
 	// const path = event.url.pathname
 	// const accessToken = parse(event.request.headers.get('cookie') || "")?.access_token;
 	// if (path.startsWith('/') || path.startsWith('/login')) {

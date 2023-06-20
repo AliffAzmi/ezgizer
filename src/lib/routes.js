@@ -18,6 +18,11 @@ const routes = [
 		href: '/categories',
 		label: 'Categories',
 		icon: 'bx:category'
+	},
+	{
+		href: '/settings/profile',
+		label: 'Settings',
+		icon: 'fluent:settings-20-filled'
 	}
 ]
 

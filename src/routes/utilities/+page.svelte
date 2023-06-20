@@ -295,9 +295,9 @@
 					>
 						<Icon class=" w-4 h-4" icon="ic:round-search" />
 					</span>
+					<!-- type="text" -->
 					<input
 						on:input={(e) => handleChangeQuery({ q: e.target.value })}
-						type="text"
 						placeholder="Search name"
 						class="border-0 px-2 py-2 placeholder-gray-300 text-gray-600 dark:text-white relative bg-white dark:bg-slate-700 rounded text-sm shadow outline-none focus:outline-none focus:ring w-full pl-10"
 					/>

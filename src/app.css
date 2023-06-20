@@ -15,3 +15,6 @@
 		font-family: 'Montserrat', sans-serif @apply font-semibold;
 	}
 }
+input[type='text'] {
+	@apply appearance-none bg-gray-200 dark:bg-slate-700 text-gray-700 dark:text-white border rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white;
+}

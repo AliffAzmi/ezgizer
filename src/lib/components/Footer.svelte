@@ -10,7 +10,7 @@
 				<div class="text-sm text-gray-500 font-semibold py-1 text-center md:text-left">
 					Copyright © {year}
 					<a
-						href="https://www.creative-tim.com?ref=ns-footer-admin"
+						href="https://aliffazmi.com"
 						class="text-gray-500 hover:text-gray-700 text-sm font-semibold py-1">Aliff Azmi</a
 					>
 				</div>
