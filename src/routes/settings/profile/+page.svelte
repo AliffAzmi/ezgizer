@@ -27,21 +27,22 @@
 	<div class=" my-4 p-4 dark:bg-slate-700 dark:border-gray-700 rounded border-2">
 		<form method="POST" use:enhance={handleSubmit}>
 			<input type="hidden" name="id" value={data?.user.id} />
-			<div class=" grid grid-cols-2">
-				<div class=" flex gap-4 items-center">
+			<div class=" flex flex-row-reverse">
+				<button type="submit" class="submit">Save</button>
+			</div>
+			<div class=" grid grid-cols-3">
+				<div class=" flex gap-4 items-center col-span-3 lg:col-span-2">
 					<img
 						alt="..."
 						class="w-20 rounded-full align-middle border-none shadow-lg"
 						src="https://lh3.googleusercontent.com/a/AAcHTtd63dP7f-VXoA_yAqc0SZYtsTwDPpbplLsgUK_4eg=s96-c"
 					/>
 					<div class="flex-grow">
-						<div>
+						<label>
+							Name
 							<input name="name" type="text" class="w-full" value={data?.user.name} />
-						</div>
+						</label>
 					</div>
-				</div>
-				<div class=" text-end">
-					<button type="submit">Save</button>
 				</div>
 			</div>
 		</form>
@@ -54,7 +55,7 @@
 			<div class="grid grid-cols-3 py-3">
 				<h5 class=" text-md col-span-2">Personal Information</h5>
 				<div class=" text-end">
-					<button type="submit">Save</button>
+					<button type="submit" class="submit">Save</button>
 				</div>
 			</div>
 
@@ -88,7 +89,7 @@
 			<input type="hidden" name="id" value={data?.user.id} />
 			<div class="grid grid-cols-3 py-3">
 				<h5 class=" text-md col-span-2">Address</h5>
-				<div class=" text-end"><button type="submit">Save</button></div>
+				<div class=" text-end"><button type="submit" class="submit">Save</button></div>
 			</div>
 
 			<div class="grid md:grid-cols-3 lg:grid-cols-3 gap-4 py-3">

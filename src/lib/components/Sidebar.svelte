@@ -50,7 +50,7 @@
 						/>
 					</button>
 				</div>
-				<TopAction open={openUserDropDown} />
+				<TopAction open={openUserDropDown} user={$page?.data?.user} />
 			</li>
 		</ul>
 
