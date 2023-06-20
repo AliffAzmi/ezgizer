@@ -13,22 +13,25 @@ export const load = async ({ locals, url }) => {
 	}
 
 	let userPayload
-	let setting
+	let settingPayload
 	if (session) {
 		let { user } = session
 		userPayload = await users.findOne({ email: user.email }, { _id: 0 })
-		userPayload._id = userPayload._id.toString().replace(/ObjectId\("(.*)"\)/, '$1')
+		if (userPayload) {
+			userPayload._id = userPayload._id.toString().replace(/ObjectId\("(.*)"\)/, '$1')
+		}
 
-		const settingPayload = await settings.findOne({ user_id: user.id })
-		settingPayload._id = settingPayload._id.toString().replace(/ObjectId\("(.*)"\)/, '$1')
-		setting = settingPayload
+		settingPayload = await settings.findOne({ user_id: user.id })
+		if (settingPayload) {
+			settingPayload._id = settingPayload._id.toString().replace(/ObjectId\("(.*)"\)/, '$1')
+		}
 	}
 
 	return {
 		isAuth: session ? true : false,
 		session: session,
 		user: userPayload || {},
-		setting: setting || {},
+		setting: settingPayload || {},
 		redirect: session ? '/dashboard' : '/login'
 	}
 }
