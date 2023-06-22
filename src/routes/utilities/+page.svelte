@@ -1,6 +1,6 @@
 <script>
 	import { onMount } from 'svelte';
-	import { items } from '$lib/stores';
+	import { items, filteredItems } from '$lib/stores';
 	import toast, { Toaster } from 'svelte-french-toast';
 	import Icon from '@iconify/svelte';
 	import { scale } from 'svelte/transition';
@@ -85,9 +85,11 @@
 		const payload = await response.json();
 		if (payload?.items) {
 			$items = payload.items;
+			$filteredItems = payload.items;
 			total = payload.total;
 		} else {
 			$items = [];
+			$filteredItems = [];
 		}
 		loading = false;
 	};
@@ -95,8 +97,9 @@
 	const handleToggleModal = (label, index) => {
 		upsertLabel = label ? label : 'Create';
 		if (label === 'Update') {
-			selecteditem = $items.find((item, idx) => idx + 1 === index);
-			selecteditem.index = index;
+			// selecteditem = $items.find((item, idx) => idx + 1 === index);
+			selecteditem = $items.find((item, idx) => item.id === index);
+			// selecteditem.index = index;
 		} else {
 			selecteditem = {};
 		}
@@ -112,7 +115,13 @@
 			const [key, value] = field;
 			data[key] = key === 'recurring' || key === 'status' ? parseInt(value) : value;
 		}
-		$items[data?.idx ? data.idx - 1 : $items.length] = data;
+		// $items[data?.idx ? data.idx - 1 : $items.length] = data;
+		if (data.id) {
+			$items = $items.map((item) => (item.id === data.id ? (item = data) : item));
+		} else {
+			$items.push(data);
+		}
+		$filteredItems = $items;
 		showItemModal = false;
 		toast('Please click save button to save your changes!', {
 			icon: '🚨'
@@ -120,7 +129,9 @@
 	};
 	const handleRemoveItem = (idx) => {
 		if (confirm('Are you sure to remove this item?')) {
-			$items = $items.filter((item, index) => index !== idx - 1);
+			// $items = $items.filter((item, index) => index !== idx - 1);
+			$items = $items.filter((item, index) => item.id !== idx);
+			$filteredItems = $items;
 		}
 	};
 
@@ -174,12 +185,16 @@
 			await getUtilities();
 		}
 		if (q) {
-			$items = $items.filter((item) => !item.name.search(new RegExp(q, 'i')));
+			// $items = $items.filter((item) => !item.name.search(new RegExp(q, 'i')));
+			$filteredItems = $filteredItems.filter((item) => !item.name.search(new RegExp(q, 'i')));
 		} else {
 			await getUtilities();
 		}
 
-		$items = $items.sort((a, b) =>
+		// $items = $items.sort((a, b) =>
+		// 	sort ? parseInt(b.price) - parseInt(a.price) : parseInt(a.price) - parseInt(b.price)
+		// );
+		$filteredItems = $filteredItems.sort((a, b) =>
 			sort ? parseInt(b.price) - parseInt(a.price) : parseInt(a.price) - parseInt(b.price)
 		);
 	};
@@ -257,7 +272,7 @@
 		</div>
 	</div>
 
-	<Table {loading} items={$items}>
+	<Table {loading} items={$filteredItems}>
 		<div slot="left_actions" class=" flex items-center gap-1">
 			<!-- <form class="md:flex hidden flex-row flex-wrap items-center lg:ml-auto mr-3"> -->
 
@@ -404,7 +419,7 @@
 				</tr>
 			</thead>
 			<tbody class="divide-y divide-gray-200 dark:divide-gray-500">
-				{#each $items as item, i}
+				{#each $filteredItems as item, i}
 					<tr>
 						<td
 							class="px-6 py-4 text-sm font-medium text-gray-800 dark:text-white whitespace-nowrap hidden lg:block"
@@ -435,13 +450,13 @@
 							/>
 						</td>
 						<td class="px-6 py-4 text-sm font-medium text-right whitespace-nowrap">
-							<button on:click={() => handleToggleModal('Update', i + 1)}>
+							<button on:click={() => handleToggleModal('Update', item.id)}>
 								<Icon
 									class=" w-6 h-6 text-blue-500 hover:text-blue-700"
 									icon="material-symbols:edit-outline-sharp"
 								/>
 							</button>
-							<button on:click={() => handleRemoveItem(i + 1)}>
+							<button on:click={() => handleRemoveItem(item.id)}>
 								<Icon
 									class=" w-6 h-6 text-red-500 hover:text-red-700"
 									icon="ic:round-delete-outline"
@@ -504,12 +519,12 @@
 						class="hidden"
 						value={selecteditem?.id ? selecteditem.id : ''}
 					/>
-					<input
+					<!-- <input
 						type="text"
 						name="idx"
 						class="hidden"
 						value={selecteditem?.index ? selecteditem.index : ''}
-					/>
+					/> -->
 					<input type="text" name="month_year" class="hidden" value={'11-22'} />
 
 					<div class="w-full md:w-1/3 px-3">
